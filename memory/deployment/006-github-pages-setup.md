@@ -25,3 +25,11 @@
 - Pages 的 `build_type=workflow` 意味着**不要**再在仓库设置里切成「Deploy from a branch」，否则会覆盖发布源。
 - 第一次部署如果早于 Pages 启用，`deploy` job 会报 `Get Pages site failed`；重新跑一次 workflow 即可。
 - 构建期读 GitHub API 需要 `pages: write` 之外的 `contents: read` 就够，工作流没有额外加权限。
+
+## 实际结果（2026-11-08）
+
+- `POST /repos/AEBC08/blog/pages {"build_type":"workflow"}` 返回 201，`html_url` 即 <https://aebc08.github.io/blog/>，`https_enforced: true`。
+- 首推触发 run [42466546760](https://github.com/AEBC08/blog/actions/runs/42466546760)，约 90 秒内 `completed / success`。
+- 线上校验：`/blog/` 与 `/blog/posts/markdown-showcase/` 均 200；首页 head 里是
+  `<link rel="icon" type="image/jpeg" href="/blog/covers/avatar.jpg">` 与对应的 `apple-touch-icon`。
+- 仓库卡片在**线上构建**里拿到了真实数据（`TypeScript 3,677 747 MIT`），说明 `GITHUB_TOKEN` 生效、沙箱里的网络失败只是本地环境限制；`:show-forks="false"` 的卡片确实不渲染 Fork 数。

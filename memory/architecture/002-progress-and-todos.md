@@ -121,7 +121,7 @@
   - 页脚 5 条链接都是 `<a target="_blank" rel="noopener noreferrer">`，协议文案可见
   - `LinkCard` 不传 `icon-bg` 时计算样式 `background-color: rgba(0, 0, 0, 0)`；传 `var(--app-primary)` / 十六进制时等于所传颜色
   - 390px 宽下 `documentElement.scrollWidth === 390`，页脚不横向溢出；明暗两套无 console error
-- `GithubRepo` 的 API 数据在本机沙箱里取不到（证书拦截），走的是回落分支：卡片只渲染仓库名与描述，不报错、不漏空标签。CI 有网络且有 `GITHUB_TOKEN`，届时会带上真实数字。
+- `GithubRepo` 的 API 数据在本机沙箱里取不到（证书拦截），本地构建走回落分支：卡片只渲染仓库名与描述，不报错、不漏空标签。GitHub Actions 的线上构建正常拿到真实数据（`TypeScript 3,677 747 MIT`），见 [deployment/006](../deployment/006-github-pages-setup.md)。
 
 ### 文档
 
