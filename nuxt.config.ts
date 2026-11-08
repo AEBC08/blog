@@ -243,6 +243,12 @@ export default defineNuxtConfig({
     '~/assets/css/main.css',
   ],
 
+  runtimeConfig: {
+    // Server-only. Used by the GithubRepo card when prerendering; the workflow
+    // passes the default Actions token so the API limit is 5000/h instead of 60.
+    githubToken: process.env.GITHUB_TOKEN || '',
+  },
+
   app: {
     // Project sites live under https://<user>.github.io/<repository>/
     baseURL: process.env.NUXT_APP_BASE_URL || '/',

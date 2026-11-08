@@ -1,7 +1,7 @@
 # LinkCard 图标背景色可配置，默认无背景
 
 - 日期：2026-11-08
-- 状态：待实现（交接）
+- 状态：已实现（detail 见 memory/README）
 - 相关文件：`app/components/content/LinkCard.vue`、`content/posts/markdown-showcase.md`
 
 ## 背景

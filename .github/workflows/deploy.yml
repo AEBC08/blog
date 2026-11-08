@@ -46,6 +46,9 @@ jobs:
         run: npx nuxt build --preset github_pages
         env:
           NUXT_APP_BASE_URL: /${{ github.event.repository.name }}/
+          # Prerendering reads repo metadata from the GitHub API; the default
+          # token lifts the anonymous 60/h limit to 5000/h.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

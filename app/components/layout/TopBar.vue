@@ -3,6 +3,9 @@ import { MiuixCard } from 'miuix-vue'
 
 const appConfig = useAppConfig()
 const route = useRoute()
+const avatar = resolveCoverImage(appConfig.profile.avatar)
+// Fallback for a missing avatar: the first character of the site title.
+const initial = appConfig.site.title.slice(0, 1).toUpperCase()
 
 function isActive(to: string): boolean {
   const path = normalizeContentPath(route.path)
@@ -26,8 +29,19 @@ function isActive(to: string): boolean {
     <MiuixCard class="topbar-card mx-auto max-w-6xl rounded-2xl">
       <div class="flex items-center gap-2 px-2.5 py-2 sm:gap-4 sm:px-4">
         <NuxtLink to="/" class="flex min-w-0 items-center gap-2.5 rounded-xl px-1 py-0.5">
-          <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-app-primary text-base font-extrabold text-app-on-primary">
-            A
+          <img
+            v-if="avatar"
+            :src="avatar"
+            :alt="appConfig.profile.name"
+            class="size-9 shrink-0 rounded-xl border border-app-border object-cover"
+            width="36"
+            height="36"
+          >
+          <span
+            v-else
+            class="grid size-9 shrink-0 place-items-center rounded-xl bg-app-primary text-base font-extrabold text-app-on-primary"
+          >
+            {{ initial }}
           </span>
           <span class="hidden min-w-0 sm:block">
             <span class="block truncate text-sm font-bold leading-tight text-app-text">{{ appConfig.site.title }}</span>

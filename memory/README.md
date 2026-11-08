@@ -10,6 +10,7 @@
 - [002 当前进度与待办](architecture/002-progress-and-todos.md)：验收结果、已验证项与遗留风险，供后续会话继续。
 - [003 项目定名 Mifumi 与站点身份信息](architecture/003-mifumi-identity.md)：**部分废弃**。把通用框架文案替换为 AEBC08 的个人博客身份；其中「站点标题 = Mifumi」被 004 取代，GitHub 链接、部署地址与导航仍然有效。
 - [004 站点身份修正：站点叫 AEBC08，Mifumi 是框架名](architecture/004-site-identity-aebc08.md)：站点标题与作者改为 AEBC08，Mifumi 仅作为框架名；头像改为 GitHub 下载的本地副本。
+- [005 标签页图标改用头像，头像文件改名 jpg](architecture/005-favicon-and-avatar-file.md)：favicon 与 `apple-touch-icon` 复用 `covers/avatar.jpg`，删除字母 SVG，记录头像实为 JPEG 的扩展名问题。
 
 ### layout
 
@@ -21,17 +22,19 @@
 - [006 统一图标系统：miuix + Tabler 注册表与 Markdown 内联图标](layout/006-icon-system.md)：新增全局 `Icon.vue` 与精选 Tabler/全部 miuix 图标注册表；正文用 `:icon{name="..."}`，并记录 `remark-mdc` 的前置字符限制。
 - [007 系统主题图标改用 sun-moon，移除滑块多余阴影](layout/007-theme-icon-and-slider-audit.md)：系统模式改用 `sun-moon`；覆盖 miuix-vue 时只保留颜色令牌，删除自加的滑块拇指阴影。
 - [008 主题色回到 miuix 默认，并拆分文字强调色](layout/008-miuix-default-primary.md)：填充色用浅色 `#3482ff` / 暗色 `#277af7`，文字用独立 `--app-primary-text`（`#2569d6` / `#8ab4ff`），让强调色与 miuix-vue 默认值一致且文字可读。
-- [009 顶栏/页脚改用 GitHub 头像，页脚改为超链接与技术栈文本](layout/009-topbar-footer-avatar-and-footer-links.md)：**待实现**。两处字母 Logo 换成 `avatar.png`，页脚技术栈与版权改超链接，并追加 CC BY-NC-SA 4.0 声明。
+- [009 顶栏/页脚改用 GitHub 头像，页脚改为超链接与技术栈文本](layout/009-topbar-footer-avatar-and-footer-links.md)：**已实现**。两处字母 Logo 换成 `avatar.jpg`，页脚技术栈与版权改超链接，并追加 CC BY-NC-SA 4.0 声明。
 
 ### content
 
 - [001 Content 集合、schema 与查询封装](content/001-content-schema-and-queries.md)：`blog` 集合、draft 过滤、published 降序、尾斜杠归一化。
 - [002 封面图方案 B](content/002-cover-image-strategy.md)：图片放 `public/`，frontmatter 写绝对路径，统一经 `resolveCoverImage` 加 baseURL。
-- [003 关于页：Markdown + Vue 混合与 pages 集合](content/003-about-page-pages-collection.md)：新增 `pages` 集合，`about.md` 负责正文，Vue 外壳与 `FriendLinks` 负责个人信息和友链区块。
+- [003 关于页：Markdown + Vue 混合与 pages 集合](content/003-about-page-pages-collection.md)：**部分废弃**。新增 `pages` 集合，`about.md` 负责正文，Vue 外壳负责个人信息；其中 `FriendLinks` 友链区块被 009 取代。
 - [004 GithubRepo：Markdown 里的 GitHub 仓库卡片](content/004-github-repo-mdc-card.md)：新增 `::GithubRepo{repo="owner/name"}` MDC 组件，支持描述、语言、Star 与自定义链接。
-- [005 GithubRepo 字段扩展：Fork 数、许可证与可选作者头像](content/005-github-repo-card-fields.md)：**待实现**。新增 `forks` / `license` / `show-avatar` / `avatar`，仍用静态 props。
-- [006 LinkCard 图标背景色可配置，默认无背景](content/006-linkcard-icon-background.md)：**待实现**。新增 `icon-bg` / `icon-color`，默认透明，用内联样式支持任意颜色。
-- [007 全站内容使用 CC BY-NC-SA 4.0 许可协议](content/007-site-license-cc-by-nc-sa.md)：**待实现**。页脚、关于页、README 与 `package.json` 同步声明协议。
+- [005 GithubRepo 字段扩展：Fork 数、许可证与可选作者头像](content/005-github-repo-card-fields.md)：**已废弃**。曾用手填静态字段，被 008 的构建期 API 抓取取代。
+- [006 LinkCard 图标背景色可配置，默认无背景](content/006-linkcard-icon-background.md)：**已实现**。新增 `icon-bg` / `icon-color`，默认透明，用内联样式支持任意颜色。
+- [007 全站内容使用 CC BY-NC-SA 4.0 许可协议](content/007-site-license-cc-by-nc-sa.md)：**已实现**。页脚、关于页、README 与 `package.json` 已同步声明协议。
+- [008 GithubRepo 改为构建期读取 GitHub API](content/008-github-repo-api-fetch.md)：语言 / Star / Fork / 许可证与头像在预渲染时抓取并写进 payload，逐项可关，失败回落静态 props。
+- [009 友链改用 MDC LinkCard，删除 FriendLinks 组件](content/009-friends-via-linkcard.md)：关于页保持 Markdown + Vue 混合，友链改为 `about.md` 里的 `::LinkCard`。
 
 ### markdown
 
@@ -55,6 +58,8 @@
 - [002 刷新文章页 404 与尾斜杠](deployment/002-trailing-slash.md)：**已废弃**。曾采用 `autoSubfolderIndex: false`，被 003 取代。
 - [003 尾斜杠刷新：目录索引方案](deployment/003-trailing-slash-directory-index.md)：改用 `autoSubfolderIndex: true`，配合应用层路径归一化。
 - [004 baseURL `/blog/` 与 `/blog` 路由冲突](deployment/004-baseurl-blog-route-collision.md)：仓库名导致的部署前缀与文章路由前缀冲突，把文章路由改为 `/posts`，集合名仍保留 `blog`。
+- [005 Git Bash 里 `/blog/` 被 MSYS 改写成 Windows 路径](deployment/005-git-bash-base-url.md)：预渲染全量 404 的根因，用 `MSYS_NO_PATHCONV=1` 解决。
+- [006 远程仓库 `AEBC08/blog` 与 GitHub Pages 上线](deployment/006-github-pages-setup.md)：建仓库、推 `main`、`build_type=workflow` 开 Pages，工作流注入 baseURL 与 `GITHUB_TOKEN`。
 
 ### quality
 
@@ -86,3 +91,7 @@
 - [layout/009](layout/009-topbar-footer-avatar-and-footer-links.md) 修正 [architecture/004](architecture/004-site-identity-aebc08.md) 里「顶栏/页脚用字母 Logo」的做法，并复用同一份 `public/covers/avatar.png`；其页脚协议行与 [content/007](content/007-site-license-cc-by-nc-sa.md) 是同一处声明的两种呈现。
 - [content/005](content/005-github-repo-card-fields.md) 扩展 [content/004](content/004-github-repo-mdc-card.md) 的 props；Fork/许可证图标新增时必须遵守 [layout/006](layout/006-icon-system.md) 的注册表规则。
 - [content/006](content/006-linkcard-icon-background.md) 把 [markdown/001](markdown/001-katex-shiki-mermaid-mdc.md) 里的 `LinkCard` 图标位从固定主色底改为可配置背景，默认无底色。
+- [architecture/005](architecture/005-favicon-and-avatar-file.md) 与 [layout/009](layout/009-topbar-footer-avatar-and-footer-links.md) 共用同一份 `covers/avatar.jpg`：一个用于标签页图标，一个用于顶栏/页脚，换图只需覆盖一个文件。
+- [content/008](content/008-github-repo-api-fetch.md) 取代 [content/005](content/005-github-repo-card-fields.md)，依赖 [layout/006](layout/006-icon-system.md) 新增的 `license` 图标；其构建期抓取与 [deployment/006](deployment/006-github-pages-setup.md) 注入的 `GITHUB_TOKEN` 配套。
+- [content/009](content/009-friends-via-linkcard.md) 取代 [content/003](content/003-about-page-pages-collection.md) 里的 `FriendLinks` 区块，复用 [content/006](content/006-linkcard-icon-background.md) 的图标样式；关于页仍是 Markdown + Vue 混合。
+- [deployment/005](deployment/005-git-bash-base-url.md) 是 [deployment/004](deployment/004-baseurl-blog-route-collision.md) 的构建侧补充：同一个 `/blog/` 前缀在 PowerShell 与 Git Bash 下的两种行为。

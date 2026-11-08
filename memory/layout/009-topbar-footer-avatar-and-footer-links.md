@@ -1,7 +1,7 @@
 # 顶栏/页脚改用 GitHub 头像，页脚改为超链接与技术栈文本
 
 - 日期：2026-11-08
-- 状态：待实现（交接）
+- 状态：已实现（detail 见 memory/README）
 - 相关文件：`app/components/layout/TopBar.vue`、`app/components/layout/FooterBar.vue`、`app/app.config.ts`、`public/covers/avatar.png`
 
 ## 背景

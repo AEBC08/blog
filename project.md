@@ -6,7 +6,7 @@
 
 
 
-\*\*当前提交\*\*：`df1aa3c`（`main`，`feat: rebrand to AEBC08 and add GitHub repo card`）。没有 remote，GitHub 仓库 `AEBC08/blog` 尚未创建，推送与部署按用户要求暂停。
+\*\*当前状态\*\*：`main` 已连远程 `origin`（`https://github.com/AEBC08/blog`），Pages 走 GitHub Actions 发布，站点 <https://aebc08.github.io/blog/>。具体部署步骤与坑见 `memory/deployment/006`。
 
 
 
@@ -26,49 +26,37 @@
 
 \- MDC 组件在 `app/components/content/`：`Callout`、`Spoiler`、`LinkCard`（`ClientOnly`）、`GithubRepo`、`FriendLinks`、`InteractivePost`、`ProseH2`、`ProsePre`、`ProseTable`、`ProseLi`
 
-\- 静态资产：头像 `public/covers/avatar.png`（GitHub 下载的本地副本）、横幅 `public/banner.svg`、favicon `public/favicon.svg`
+\- 静态资产：头像 `public/covers/avatar.jpg`（GitHub 下载的本地副本，同时作为浏览器标签页图标）、横幅 `public/banner.svg`；旧的 `public/favicon.svg` 已删除
 
 \- 构建验证命令：`$env:NUXT\_APP\_BASE\_URL='/blog/'; pnpm exec nuxt build --preset github\_pages`，产物在 `.output/public`（已 gitignore）
 
 
 
-\## 本轮待实现（用户最后一次需求，代码均未改动）
+\## 本轮已完成（2026-11-08，最新）
 
 
 
-按优先级排列，每条都有对应的 memory 记录，含选项与后果，实施前先读：
+上一轮列出的六项需求全部落地，并新增三项：标签页图标换成头像、友链改用 MDC `LinkCard`、远程仓库与 Pages 上线。逐条决策见 `memory/README.md`，状态汇总见 `memory/architecture/002-progress-and-todos.md`。
 
 
 
-1\. \*\*顶栏与页脚头像\*\*：现在还是字母 `A` 方块，用户要求显示 GitHub 头像。用 `resolveCoverImage(appConfig.profile.avatar)` 拼 `baseURL`，保留字母兜底，详见 `memory/layout/009`
+\- 顶栏/页脚头像、页脚技术栈超链接与 CC BY-NC-SA 4.0 协议行：`memory/layout/009`、`memory/content/007`
 
-2\. \*\*页脚改为超链接文本\*\*：Nuxt 4 / Nuxt Content / miuix-vue / GitHub Pages 四项改成 `<a>`，统一 `target="_blank"` + `rel="noopener noreferrer"`，详见 `memory/layout/009`
+\- `GithubRepo` 的语言 / Star / Fork / 许可证改为**构建期读 GitHub API** 并逐项开关（`show-language` / `show-stars` / `show-forks` / `show-license` / `show-avatar`），请求失败回落静态 props：`memory/content/008`（旧的手填方案 `content/005` 已废弃）
 
-3\. \*\*全站内容声明 CC BY-NC-SA 4.0\*\*：页脚协议行 + 关于页 + README + `package.json` 的 `license`，链接到 `https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans`，详见 `memory/content/007`
+\- `LinkCard` 新增 `icon-bg` / `icon-color`，默认透明：`memory/content/006`
 
-4\. \*\*`GithubRepo` 扩展\*\*：新增 `forks`、`license`、`show-avatar`（默认 `false`）、`avatar`（覆盖头像地址），仍用静态 props，不请求 GitHub API，详见 `memory/content/005`
+\- 标签页图标 = 头像，`avatar.png` 改名为 `avatar.jpg`：`memory/architecture/005`
 
-5\. \*\*`LinkCard` 图标背景\*\*：新增 `icon-bg`、`icon-color`，默认\*\*无背景色\*\*（透明），用内联 style 支持任意 CSS 颜色，详见 `memory/content/006`
+\- 友链改为 `content/pages/about.md` 里的 `::LinkCard`，删除 `FriendLinks.vue` 与 `app.config.friends`：`memory/content/009`
 
-6\. \*\*可选、未开工\*\*：顶栏「自定义选项弹窗」（不只是调色）。要做的话扩展现有 `useTheme`，不要新建第二套主题状态，详见 `memory/layout/008` 的后果部分
-
-
-
-\*\*改完必须验证\*\*：
+\- 远程仓库 `AEBC08/blog` 与 Pages（`build_type=workflow`）：`memory/deployment/006`
 
 
 
-\- `pnpm lint`、`pnpm typecheck` 零错误
+\*\*仍未开工\*\*：顶栏「自定义选项弹窗」（不只是调色），扩展现有 `useTheme`，见 `memory/layout/008` 后果部分。
 
-\- 子路径构建 + Node 静态服务器，明暗两套各看一遍 `/blog/`、`/blog/about`、`/blog/posts`、`/blog/posts/markdown-showcase`
 
-\- 顶栏/页脚构建产物里应有 `covers/avatar.png` 的 `<img>`，且不再有 `<span ...>A</span>`
-
-\- 页脚技术栈与协议都是 `<a href>`，外链带 `rel="noopener noreferrer"`
-
-\- `GithubRepo` 不传可选 props 时不渲染空标签；`LinkCard` 不传 `icon-bg` 时计算样式 `background-color` 为 `rgba(0, 0, 0, 0)`
-
-\- 移动端 390px 宽页脚不横向溢出，无 console error、无 4xx/5xx
 
 
 

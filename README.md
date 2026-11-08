@@ -12,7 +12,7 @@ Mifumi 是这个博客使用的静态博客框架名称。
 - 顶部导航 + 侧边栏 widget + 主内容的响应式双栏布局
 - 亮色 / 暗色主题，首屏无闪烁，Mermaid 主题同步
 - KaTeX 数学公式、Shiki 双主题代码高亮、Mermaid 图表
-- MDC 组件：`Callout`、`Spoiler`、`LinkCard`（`ClientOnly`）与 `GithubRepo` 仓库卡片
+- MDC 组件：`Callout`、`Spoiler`、`LinkCard`（`ClientOnly`，图标背景可配置）与 `GithubRepo` 仓库卡片（语言 / Star / Fork / 许可证在构建期读 GitHub API，可逐项关闭，可选所有者头像）
 - 统一图标系统：`Icon` 组件 + Tabler / miuix 图标注册表，正文可用 `:icon{name="..."}` 内联
 - 自定义 `ProseH2` 覆盖生效
 - `layout: interactive` 的文章由 Vue 组件渲染
@@ -49,7 +49,7 @@ pnpm new-post notes/nuxt-content
 app/                  # Nuxt 4 源码目录（页面、组件、composables、样式）
 content/posts/        # Markdown 文章，嵌套目录自动成为嵌套 slug
 content/pages/        # 独立页面（关于页），由 pages 集合渲染
-public/               # 封面、头像、favicon、.nojekyll
+public/               # 封面、头像（同时用作浏览器标签页图标）、.nojekyll
 memory/               # 分类的技术决策记录（含索引）
 scripts/new-post.mjs  # 发帖脚本
 content.config.ts     # blog / pages 集合与 schema
@@ -148,6 +148,7 @@ pnpm preview
 
 - `NUXT_APP_BASE_URL=/${{ github.event.repository.name }}/`：项目站点子路径
 - `npx nuxt build --preset github_pages`
+- `GITHUB_TOKEN`：构建期读取仓库卡片数据，避免匿名 API 的 60 次/小时限制
 - `app.buildAssetsDir: 'nuxt_assets'`：避免 GitHub Pages 忽略 `_nuxt` 这类下划线目录
 - `public/.nojekyll`：关闭 Jekyll 处理
 - `nitro.prerender.autoSubfolderIndex: true`：生成 `posts/hello/index.html`（对外 URL 为 `/blog/posts/hello/`），带尾斜杠刷新直接命中，无尾斜杠由静态服务器 301 到目录
@@ -163,3 +164,10 @@ pnpm exec nuxt build --preset github_pages
 ```
 
 如果使用自定义域名或用户站点（`<user>.github.io`），把 `NUXT_APP_BASE_URL` 设为 `/`。
+
+## 许可
+
+本站文字与图片除特别注明外，均采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 许可协议：允许署名转载与改编，但不得用于商业目的，衍生作品需以相同协议共享。
+
+`package.json` 的 `license` 字段同样声明 `CC-BY-NC-SA-4.0`，仅描述本仓库的内容；Nuxt、miuix-vue、Tabler 图标等依赖仍遵循各自的上游许可证（如 miuix-vue 为 Apache-2.0）。
+

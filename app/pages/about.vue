@@ -49,7 +49,6 @@ useSeoMeta({
 
         <div class="border-t border-app-divider p-6 sm:p-10">
           <ContentRenderer :value="page" class="post-content" />
-          <FriendLinks />
         </div>
       </article>
     </MiuixCard>

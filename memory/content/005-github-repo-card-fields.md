@@ -1,7 +1,7 @@
 # GithubRepo 字段扩展：Fork 数、许可证与可选作者头像
 
 - 日期：2026-11-08
-- 状态：待实现（交接）
+- 状态：已废弃（被 content/008 取代）
 - 相关文件：`app/components/content/GithubRepo.vue`、`app/utils/icon-registry.ts`、`content/pages/about.md`、`content/posts/markdown-showcase.md`
 
 ## 背景

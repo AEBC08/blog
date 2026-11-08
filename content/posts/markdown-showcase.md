@@ -111,15 +111,30 @@ Callout 的 `type` 支持 `info`、`tip`、`warning`、`danger`。
 
 ## LinkCard
 
+默认图标没有背景色，只保留主色图标；需要色块时用 `icon-bg` 指定任意 CSS 颜色，
+必要时再用 `icon-color` 换成与背景对比的颜色。
+
 ::LinkCard{title="Nuxt Content" description="用 Markdown 驱动的文件式 CMS。" href="https://content.nuxt.com" icon="brand-nuxt"}
 ::
 
-::LinkCard{title="miuix-vue" description="面向 Vue 3 的 HyperOS / miuix 组件库。" href="https://github.com/YuKongA/miuix-vue" icon="brand-vue"}
+::LinkCard{title="miuix-vue" description="面向 Vue 3 的 HyperOS / miuix 组件库。" href="https://github.com/YuKongA/miuix-vue" icon="brand-vue" icon-bg="var(--app-primary)" icon-color="#ffffff"}
+::
+
+::LinkCard{title="GitHub Pages" description="静态站点的免费托管。" href="https://pages.github.com" icon="brand-github" icon-bg="#f3f0ff" icon-color="#6b46c1"}
 ::
 
 ## GitHub 仓库卡片
 
-::GithubRepo{repo="nuxt/content" description="Nuxt 的文件式 CMS，本站内容层的基础。" language="TypeScript"}
+`GithubRepo` 会在构建时读取 GitHub API，把语言、Star、Fork 与许可证一起写进页面，
+访客不会请求 API。每个字段都能单独关掉，例如 `:show-forks="false"`：
+
+::GithubRepo{repo="nuxt/content" description="Nuxt 的文件式 CMS，本站内容层的基础。"}
+::
+
+`show-avatar` 打开后左侧换成仓库所有者的头像，也可以用 `avatar` 覆盖成本地图；
+离线构建或触发限流时可以再传静态 `stars` / `forks` / `license` 兜底：
+
+::GithubRepo{repo="YuKongA/miuix-vue" description="面向 Vue 3 的 HyperOS / miuix 组件库。" :show-forks="false" :show-avatar="true"}
 ::
 
 ## GFM

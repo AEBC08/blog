@@ -7,11 +7,17 @@ interface Props {
   description?: string
   /** Either a registry icon name (`miuix:Folder`, `arrow-right`) or a letter. */
   icon?: string
+  /** Any CSS colour; defaults to no background so the icon sits on the card. */
+  iconBg?: string
+  /** Any CSS colour; defaults to `--app-primary-text`. */
+  iconColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   description: undefined,
   icon: undefined,
+  iconBg: undefined,
+  iconColor: undefined,
 })
 
 const hostname = computed(() => {
@@ -40,6 +46,13 @@ const iconName = computed(() => {
 })
 
 const initial = computed(() => props.icon ?? props.title.slice(0, 1).toUpperCase())
+
+// Tailwind cannot enumerate arbitrary colour values at build time, so the
+// configurable background and icon colour are applied as inline styles.
+const iconStyle = computed(() => ({
+  backgroundColor: props.iconBg ?? 'transparent',
+  color: props.iconColor,
+}))
 </script>
 
 <template>
@@ -50,7 +63,10 @@ const initial = computed(() => props.icon ?? props.title.slice(0, 1).toUpperCase
       rel="noopener noreferrer"
       class="group my-6 flex items-center gap-4 rounded-2xl border border-app-divider bg-app-card p-4 shadow-sm transition-colors hover:border-app-primary/40 hover:bg-app-bg-soft"
     >
-      <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-app-primary text-base font-bold text-app-on-primary">
+      <span
+        class="grid size-11 shrink-0 place-items-center rounded-xl text-base font-bold text-app-primary-text"
+        :style="iconStyle"
+      >
         <Icon v-if="iconName" :name="iconName" :size="22" />
         <template v-else>{{ initial }}</template>
       </span>

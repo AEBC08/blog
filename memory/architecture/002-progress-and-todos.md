@@ -97,24 +97,31 @@
 - 新增 `app/components/content/GithubRepo.vue`：`::GithubRepo{repo="owner/name" description="..." language="..." stars="..."}`，在 `about.md` 与 `markdown-showcase.md` 中使用
 - `content/posts/hello.md` 标题改为「你好，这里是 AEBC08」，正文提一句 Mifumi 框架
 
-### 待实现（交接给下一个 agent）
+### 本轮完成（2026-11-08）
 
-上一轮提交停在 `df1aa3c`，以下需求已写好决策记录但**代码尚未改动**：
+上一轮交接的六项已落地：
 
-1. 顶栏/页脚头像：字母 `A` 方块换成 `avatar.png`，带 `resolveCoverImage` 与字母兜底，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
-2. 页脚技术栈改为超链接文本（Nuxt / Nuxt Content / miuix-vue / GitHub Pages），统一外链属性，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
-3. 全站内容声明 **CC BY-NC-SA 4.0**：页脚协议行 + 关于页 + README + `package.json` 的 `license`，见 [content/007](../content/007-site-license-cc-by-nc-sa.md)。
-4. `GithubRepo` 增加 `forks` / `license` / `show-avatar` / `avatar`，见 [content/005](../content/005-github-repo-card-fields.md)。
-5. `LinkCard` 增加 `icon-bg` / `icon-color`，默认无背景色，见 [content/006](../content/006-linkcard-icon-background.md)。
-6. 未开工的可选项：顶栏「自定义选项弹窗」（见 [layout/008](../layout/008-miuix-default-primary.md) 后果部分）。
+1. 顶栏/页脚头像：`TopBar` / `FooterBar` 改用 `covers/avatar.jpg`，`resolveCoverImage` 拼 baseURL，保留首字母兜底与暗色描边，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
+2. 页脚技术栈改为 `<a>`（Nuxt / Nuxt Content / miuix-vue / GitHub Pages），统一 `target="_blank" rel="noopener noreferrer"`，并新增「© 年份 AEBC08 + CC BY-NC-SA 4.0」一行。
+3. 全站声明 **CC BY-NC-SA 4.0**：页脚、关于页、README、`package.json` 的 `license`，见 [content/007](../content/007-site-license-cc-by-nc-sa.md)。
+4. `GithubRepo` 的语言 / Star / Fork / 许可证改为构建期读 GitHub API 并逐项开关，`show-avatar` 可选，见 [content/008](../content/008-github-repo-api-fetch.md)。原先手填字段的 [content/005](../content/005-github-repo-card-fields.md) 已废弃。
+5. `LinkCard` 新增 `icon-bg` / `icon-color`，默认无背景色，见 [content/006](../content/006-linkcard-icon-background.md)。
+6. 标签页图标改为头像，头像文件由 `avatar.png` 改名为 `avatar.jpg`，见 [architecture/005](../architecture/005-favicon-and-avatar-file.md)。
+7. 友链改用 `about.md` 里的 `::LinkCard`，删除 `FriendLinks.vue` 与 `app.config.friends`，见 [content/009](../content/009-friends-via-linkcard.md)。
 
-验收要求：改完必须跑 `pnpm lint`、`pnpm typecheck`，并用 `NUXT_APP_BASE_URL=/blog/ pnpm exec nuxt build --preset github_pages` + Node 静态服务器在明暗两套下验证，重点看：
+仍未开工的可选项：顶栏「自定义选项弹窗」（不只是调色），扩展现有 `useTheme`，见 [layout/008](../layout/008-miuix-default-primary.md) 后果部分。
 
-- 顶栏/页脚头像是否真的渲染 `<img>`（构建产物 `index.html` 里应有 `covers/avatar.png`，且没有 `<span ...>A</span>`）
-- 页脚四项技术栈与协议链接是否都是 `<a href>`，外链是否带 `rel="noopener noreferrer"`
-- `GithubRepo` 缺省值（不传 `forks` / `license` / `show-avatar`）时不会渲染空标签
-- `LinkCard` 不传 `icon-bg` 时容器 `background-color` 为 `rgba(0, 0, 0, 0)`，传了之后计算样式等于所传颜色
-- 移动端 390px 宽下页脚不横向溢出
+本轮验证方式与结果（2026-11-08）：
+
+- `pnpm lint`、`pnpm typecheck` 均 0 error
+- `NUXT_APP_BASE_URL=/blog/ pnpm exec nuxt build --preset github_pages` 通过（Git Bash 需加 `MSYS_NO_PATHCONV=1`，见 [deployment/005](../deployment/005-git-bash-base-url.md)）
+- 用无头 Edge + ADB 协议在 `127.0.0.1` 静态服务上验证 `/blog/`、`/blog/about/`、`/blog/posts/`、`/blog/posts/markdown-showcase/`：
+  - 顶栏/页脚确实是 `<img src="/blog/covers/avatar.jpg">`，`naturalWidth=200`，页面上不再有字母 `A` 方块
+  - `<link rel="icon" type="image/jpeg" href="/blog/covers/avatar.jpg">` 与 `apple-touch-icon` 同时存在
+  - 页脚 5 条链接都是 `<a target="_blank" rel="noopener noreferrer">`，协议文案可见
+  - `LinkCard` 不传 `icon-bg` 时计算样式 `background-color: rgba(0, 0, 0, 0)`；传 `var(--app-primary)` / 十六进制时等于所传颜色
+  - 390px 宽下 `documentElement.scrollWidth === 390`，页脚不横向溢出；明暗两套无 console error
+- `GithubRepo` 的 API 数据在本机沙箱里取不到（证书拦截），走的是回落分支：卡片只渲染仓库名与描述，不报错、不漏空标签。CI 有网络且有 `GITHUB_TOKEN`，届时会带上真实数字。
 
 ### 文档
 

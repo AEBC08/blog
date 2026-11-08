@@ -21,7 +21,16 @@ GitHub： [AEBC08](https://github.com/AEBC08)
 - 支持浅色、深色与跟随系统三种主题
 - 通过 GitHub Actions 部署到 GitHub Pages
 
-::GithubRepo{repo="AEBC08/blog" description="这个博客的源码，基于 Mifumi 框架构建。" language="Vue"}
+本站文字与图片除特别注明外，均采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 许可协议。
+
+::GithubRepo{repo="AEBC08/blog" description="这个博客的源码，基于 Mifumi 框架构建。" :show-avatar="true" avatar="/covers/avatar.jpg"}
+::
+
+## 友链
+
+友链还在整理中。想交换链接的话，可以在 GitHub 找到我：
+
+::LinkCard{title="AEBC08" description="GitHub · 交换友链" href="https://github.com/AEBC08" icon="brand-github"}
 ::
 
 ## 现在
