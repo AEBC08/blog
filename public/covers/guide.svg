@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Guide cover">
+  <rect width="1200" height="630" fill="#15181d"/>
+
+  <g stroke="#222831" stroke-width="1">
+    <path d="M0 105H1200M0 210H1200M0 315H1200M0 420H1200M0 525H1200"/>
+    <path d="M150 0V630M300 0V630M450 0V630M600 0V630M750 0V630M900 0V630M1050 0V630"/>
+  </g>
+
+  <rect x="72" y="72" width="48" height="4" rx="2" fill="#3482ff"/>
+  <text x="72" y="112" fill="#8b919c" font-family="MiSans, system-ui, sans-serif" font-size="18" letter-spacing="4">GUIDE</text>
+
+  <text x="900" y="500" text-anchor="middle" fill="none" stroke="#2a303a" stroke-width="12" font-family="MiSans, system-ui, sans-serif" font-size="400" font-weight="800">G</text>
+  <rect x="810" y="540" width="180" height="4" fill="#3482ff"/>
+  <text x="72" y="560" fill="#5a6270" font-family="MiSans, system-ui, sans-serif" font-size="16" letter-spacing="2">WRITING · WORKFLOW</text>
+</svg>

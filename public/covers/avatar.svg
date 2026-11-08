@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Miuix avatar">
+  <rect width="200" height="200" rx="100" fill="#3482ff"/>
+  <circle cx="100" cy="100" r="74" fill="none" stroke="#ffffff" stroke-opacity="0.32" stroke-width="2"/>
+  <text x="100" y="128" text-anchor="middle" fill="#ffffff" font-family="MiSans, system-ui, sans-serif" font-size="82" font-weight="800">M</text>
+</svg>
