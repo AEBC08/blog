@@ -144,14 +144,14 @@
 
 ## 遗留风险与后续
 
-1. 仓库尚未 `git init`，工作流未在真实 GitHub Actions 上跑过；首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。
+1. 本地已 `git init` 并提交 `aa47c0b`（`main`，89 个文件），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建仓库，部署按用户要求暂停。
 2. `miuix-vue` 的 Nitro alias/inline 是版本相关修复，升级后需重新验证预渲染，详见 [ssr/003](../ssr/003-nitro-vue-duplicate.md)。
 3. `pnpm peers check` 报告非致命 peer 警告（`oxc-parser >=0.140.0`、`typescript >=6.0.0`）；TypeScript 有意保持在 5.9.3。
 4. `LinkCard` 按要求包在 `<ClientOnly>` 中，静态 HTML 不包含卡片内容，水合后才出现。
 5. interactive 文章的 `ClientOnly` 增加了 `ContentRenderer` fallback，静态 HTML 至少包含 Markdown 正文；交互 widget 仍在水合后出现。
 6. 直接访问静态 `404.html` 会在控制台输出预期的 `[NUXT_E1005]`（Nuxt 的 `app:error` 钩子），不是渲染失败，详见 [quality/002](../quality/002-custom-error-page.md)。
 7. 构建产物 `.output/`、预览目录与 Playwright 临时文件属于生成物，交付前应清理；`build.log` / `build-gh.log` 已移除。
-8. 静态预览服务器仅用于本机验证，交付时需停止；正式部署依赖 GitHub Actions 产物。
+8. 静态预览服务器仅用于本机验证；本轮验证完成后已停止，浏览器标签也已关闭。正式部署依赖 GitHub Actions 产物。
 9. 侧边栏固定依赖 `min-height: 900px` 断点；若继续增加侧栏 widget，需要重新评估该阈值，否则矮视口下仍会出现内容不可达。
 10. Mermaid 配色依赖 `contentMermaid.loader.init.themeCSS` 的注入顺序与模块内部类名；升级 `@barzhsieh/nuxt-content-mermaid` 或 Mermaid 后需重新检查 `themeCSS` 是否生效、形状 `rx/ry` 是否仍由 Mermaid 生成。
 11. 主题菜单是自定义 popover（miuix-vue 暂无 popover 原语）；若后续引入原语，需要保留 `role="menu"`、`menuitemradio`、`aria-expanded` 与外部点击/Escape 行为。
