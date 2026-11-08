@@ -37,7 +37,7 @@ const hasFilter = computed(() => Boolean(activeCategory.value || activeTag.value
 
 async function clearFilters(): Promise<void> {
   search.value = ''
-  await navigateTo('/blog')
+  await navigateTo('/posts')
 }
 
 useSeoMeta({
@@ -73,7 +73,7 @@ useSeoMeta({
 
           <div class="mt-5 flex flex-wrap gap-2">
             <NuxtLink
-              to="/blog"
+              to="/posts"
               class="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors"
               :class="!activeCategory
                 ? 'border-app-primary/30 bg-app-primary-soft text-app-primary'
@@ -85,7 +85,7 @@ useSeoMeta({
             <NuxtLink
               v-for="category in categories"
               :key="category.name"
-              :to="{ path: '/blog', query: { category: category.name } }"
+              :to="{ path: '/posts', query: { category: category.name } }"
               class="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors"
               :class="activeCategory === category.name
                 ? 'border-app-primary/30 bg-app-primary-soft text-app-primary'

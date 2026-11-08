@@ -3,7 +3,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import process from 'node:process'
 
-const CONTENT_DIR = resolve(process.cwd(), 'content/blog')
+const CONTENT_DIR = resolve(process.cwd(), 'content/posts')
 const SLUG_SEGMENT = /^[a-z0-9][a-z0-9._-]*$/
 
 /**

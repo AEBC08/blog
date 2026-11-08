@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
       <ul class="mt-3 space-y-0.5">
         <li v-for="term in props.terms" :key="term.name">
           <NuxtLink
-            :to="{ path: '/blog', query: { category: term.name } }"
+            :to="{ path: '/posts', query: { category: term.name } }"
             class="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-sm transition-colors"
             :class="props.active === term.name
               ? 'bg-app-primary-soft font-semibold text-app-primary'

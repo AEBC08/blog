@@ -28,7 +28,7 @@ const props = defineProps<Props>()
       <p class="mt-1 text-xs text-app-text-faint">
         换一个关键词或分类试试。
       </p>
-      <NuxtLink to="/blog" class="mt-4 rounded-full bg-app-primary px-4 py-2 text-xs font-semibold text-app-on-primary transition-opacity hover:opacity-90">
+      <NuxtLink to="/posts" class="mt-4 rounded-full bg-app-primary px-4 py-2 text-xs font-semibold text-app-on-primary transition-opacity hover:opacity-90">
         查看全部文章
       </NuxtLink>
     </div>

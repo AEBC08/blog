@@ -11,13 +11,13 @@ function isActive(to: string): boolean {
     return true
   }
 
-  if (to !== '/blog') {
+  if (to !== '/posts') {
     return false
   }
 
-  const matchesAnotherNavItem = appConfig.navigation.some(item => item.to !== '/blog' && path === item.to)
+  const matchesAnotherNavItem = appConfig.navigation.some(item => item.to !== '/posts' && path === item.to)
 
-  return path.startsWith('/blog/') && !matchesAnotherNavItem
+  return path.startsWith('/posts/') && !matchesAnotherNavItem
 }
 </script>
 
@@ -51,7 +51,7 @@ function isActive(to: string): boolean {
 
         <div class="flex items-center gap-0.5">
           <a
-            href="https://github.com/"
+            href="https://github.com/AEBC08"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"

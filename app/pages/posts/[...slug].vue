@@ -39,7 +39,7 @@ useSeoMeta({
   <MainGrid>
     <div v-if="page" class="space-y-5">
       <NuxtLink
-        to="/blog"
+        to="/posts"
         class="group inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-card px-4 py-2 text-sm font-medium text-app-text-variant shadow-sm transition-colors hover:border-app-primary/40 hover:text-app-primary"
       >
         <Icon name="arrow-left" class="transition-transform group-hover:-translate-x-0.5" :size="16" />
@@ -97,7 +97,7 @@ useSeoMeta({
                 文章结束
               </p>
               <NuxtLink
-                to="/blog"
+                to="/posts"
                 class="mt-1 inline-flex items-center gap-2 rounded-full bg-app-primary-soft px-4 py-2 text-xs font-semibold text-app-primary transition-colors hover:bg-app-primary hover:text-app-on-primary"
               >
                 <Icon name="arrow-left" :size="14" />

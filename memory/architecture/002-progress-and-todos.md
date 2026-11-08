@@ -75,6 +75,17 @@
 - `--app-on-primary` 在明暗主题中都改为 `#ffffff`；`--m-color-on-secondary` 固定 `#ffffff`，Switch/Slider 拇指与主色按钮文字统一白色
 - Mermaid 改用 `contentMermaid.loader.init.themeCSS`：配色/字体走 `var(--app-*)`，删除 `main.css` 的节点/边/子图覆盖与 `rx/ry`，保留 Mermaid 自己生成的形状几何
 
+### Mifumi 身份、关于页与 `/posts` 路由
+
+- 站点身份改为 **Mifumi** / **AEBC08**：`app.config.ts`、`nuxt.config.ts` head、`package.json`、README、`public/banner.svg`、`public/favicon.svg`、`public/covers/avatar.svg`、`content/posts/hello.md`
+- 顶栏导航改为「首页 / 文章 / 关于」；首页 hero「写作指南」改为「关于我」，指向 `/about`
+- 新增 `pages` 集合（`source: 'pages/**/*.md'`）与 `content/pages/about.md`；`app/pages/about.vue` 用 Vue 外壳 + `ContentRenderer` 渲染 Markdown
+- 新增 `app/components/content/FriendLinks.vue`：读取 `appConfig.friends`，支持双列卡片与空状态；友链数据在 `app.config.ts` 维护
+- 文章路由前缀从 `/blog` 改为 `/posts`（`app/pages/posts/*`、`content/posts/*`、`scripts/new-post.mjs`、所有站内链接与预渲染路由）；内部集合名仍为 `blog`
+- 系统主题图标从 `device-desktop` 改为 `sun-moon`，并登记到 `icon-registry.ts`
+- 删除 `.demo-slider .m-slider__thumb` 的自加阴影，滑块只保留颜色令牌覆盖
+- `content/posts/markdown-showcase.md` 的系统主题图标示例同步改为 `sun-moon`
+
 ### 文档
 
 - 根 `README.md`：写作、frontmatter、Markdown 限制、部署说明
@@ -83,6 +94,7 @@
 - 新增 `layout/004`（扁平化、侧边栏、滑块）与 `markdown/004`（代码复制、Mermaid miuix 化）；`layout/002`、`layout/003`、`markdown/003` 标记为部分废弃并补充后续变更
 - 新增 `ssr/004`（三态主题与 on-primary）、`layout/005`（miuix 组件审计与令牌修复）、`markdown/005`（Mermaid 外框）；`ssr/001`、`markdown/004` 标记为部分废弃；更新索引与跨目录关联
 - 新增 `layout/006`（图标系统）与 `markdown/006`（Mermaid 生成主题）；`ssr/004` 的 on-primary 部分标记为部分废弃；`markdown/003`、`markdown/004`、`markdown/005` 补充后续修订；更新索引与跨目录关联
+- 新增 `architecture/003`（Mifumi 身份）、`content/003`（关于页与 `pages` 集合）、`deployment/004`（`/blog/` 前缀冲突与 `/posts` 路由）、`layout/007`（`sun-moon` 与滑块阴影）；更新索引与跨目录关联
 
 ## 已验证
 
@@ -141,10 +153,19 @@
   - 明暗两套 `--m-color-on-primary` / `--m-color-on-secondary` / `--app-on-primary` 均为 `#fff`；`MiuixButton type="primary"` 文字、滑块拇指、开关拇指均为白色
   - Mermaid 暗色节点 `fill: rgb(31,31,31)`、`stroke: rgb(69,69,69)`、`filter: none`；`[]`/`()`/`([])`/`(())`/`{}` 分别输出 `rect`（无 `rx`）/`rect`（`rx="5"`）/`path`/`circle`/`polygon`
   - 主题菜单仍可切换 system/light/dark，`data-theme-mode` 与 `localStorage.theme-mode` 同步
+- Mifumi 身份、关于页与 `/posts` 验证（`NUXT_APP_BASE_URL=/blog/` 子路径构建 + Node 静态服务器）：
+  - `pnpm lint` 0 error / 0 warning，`pnpm typecheck` 0 error
+  - 构建产物含 `index.html`、`about/index.html`、`posts/index.html`、`posts/hello/index.html`、`posts/guide/index.html`、`posts/markdown-showcase/index.html`、`posts/interactive/index.html`
+  - `/blog/`、`/blog/about`、`/blog/posts`、`/blog/posts/hello` 均 200；页面无 console error，网络请求无 4xx/5xx
+  - 首页、文章列表、文章详情与页脚的站内链接均为 `/blog/posts/...` 或 `/blog/about`，无 `/blog/blog` 重复前缀
+  - 关于页正确渲染 Markdown 正文、`About` 微标签、友链空状态与「交换友链」GitHub 链接
+  - 系统模式下主题触发按钮与菜单项显示 `sun-moon`（`display: block`），浅色/深色模式分别显示 `sun` / `moon`
+  - 交互页滑块 `.m-slider__thumb` 计算样式 `box-shadow: none`
+  - 首页、文章列表、文章详情、关于页在明暗两套主题下均正常渲染，无横向溢出
 
 ## 遗留风险与后续
 
-1. 本地已 `git init` 并提交 `aa47c0b`（`main`，89 个文件），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建仓库，部署按用户要求暂停。
+1. 本地已 `git init`，最新提交为 `78176ca`（`main`），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建仓库，部署按用户要求暂停；Mifumi 身份、关于页与 `/posts` 改动仍是未提交状态。
 2. `miuix-vue` 的 Nitro alias/inline 是版本相关修复，升级后需重新验证预渲染，详见 [ssr/003](../ssr/003-nitro-vue-duplicate.md)。
 3. `pnpm peers check` 报告非致命 peer 警告（`oxc-parser >=0.140.0`、`typescript >=6.0.0`）；TypeScript 有意保持在 5.9.3。
 4. `LinkCard` 按要求包在 `<ClientOnly>` 中，静态 HTML 不包含卡片内容，水合后才出现。
@@ -157,3 +178,7 @@
 11. 主题菜单是自定义 popover（miuix-vue 暂无 popover 原语）；若后续引入原语，需要保留 `role="menu"`、`menuitemradio`、`aria-expanded` 与外部点击/Escape 行为。
 12. `MiuixCard` 的 class 只作用于 `.m-card-wrapper`；新增卡片时布局必须放内层，且 popover 需要显式放开内层 `overflow`，否则会被裁切。
 13. 图标注册表是静态具名导入，图标数量继续增长会增加客户端 bundle；新增图标时同时更新 `icon-registry.ts` 的导入与 `TABLER_COMPONENTS`。正文 `:icon{...}` 前必须是行首、空白或允许的标点，中文全角标点后需补空格。
+14. 内部 Content 集合名仍为 `blog`，公开路由却是 `/posts`；新增代码时不要按集合名推断 URL，路径以 `post.path` 与 `content/posts/` 为准，详见 [deployment/004](../deployment/004-baseurl-blog-route-collision.md)。
+15. 关于页的 `content/pages/about.md` 在 Content 中路径是 `/pages/about`，公开路由是 `/about`；新增独立页面需要同时创建 `content/pages/<name>.md` 与 `app/pages/<name>.vue`，详见 [content/003](../content/003-about-page-pages-collection.md)。
+16. 友链当前为空数组，页面显示空状态；添加友链需要在 `appConfig.friends` 中填写 `{ name, href, description, icon? }`，图标名必须是注册表已有名称。
+17. 覆盖 miuix-vue 组件时优先只改 CSS 变量；`sun-moon` 与滑块阴影的教训见 [layout/007](../layout/007-theme-icon-and-slider-audit.md)，不要再给上游组件追加非必要阴影或尺寸。

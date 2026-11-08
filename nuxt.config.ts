@@ -250,10 +250,10 @@ export default defineNuxtConfig({
     buildAssetsDir: 'nuxt_assets',
     head: {
       htmlAttrs: { lang: 'zh-CN' },
-      title: 'Miuix Blog',
+      title: 'Mifumi',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '一个使用 Nuxt 4、Nuxt Content 与 miuix-vue 构建的静态博客。' },
+        { name: 'description', content: 'AEBC08 的个人博客，记录开发、工具与日常折腾。' },
         { name: 'theme-color', content: '#f2f3f5', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#121212', media: '(prefers-color-scheme: dark)' },
       ],
@@ -331,9 +331,9 @@ export default defineNuxtConfig({
     },
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/blog'],
-      // Emit /blog/hello/index.html so both /blog/hello/ and GitHub Pages'
-      // directory redirect for /blog/hello resolve on static hosting.
+      routes: ['/', '/posts'],
+      // Emit /posts/hello/index.html so both /posts/hello/ and GitHub Pages'
+      // directory redirect for /posts/hello resolve on static hosting.
       autoSubfolderIndex: true,
     },
   },

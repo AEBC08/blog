@@ -854,17 +854,11 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
   padding-bottom: 1rem;
 }
 
-/* Miuix slider: keep the HyperOS flat track and give the thumb a subtle edge. */
+/* Miuix slider: keep the HyperOS flat track and let the component draw its
+ * own thumb. Only colour tokens belong here; extra shadows or sizing would
+ * drift away from the upstream component. */
 .demo-slider {
   --m-color-slider-background: var(--app-bg-soft);
   --m-color-primary: var(--app-primary);
   --m-color-on-primary: var(--app-on-primary);
-}
-
-.demo-slider .m-slider__thumb {
-  box-shadow: 0 1px 2px rgb(15 23 42 / 0.18);
-}
-
-.dark .demo-slider .m-slider__thumb {
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
 }

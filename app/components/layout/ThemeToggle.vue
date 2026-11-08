@@ -9,7 +9,7 @@ interface ThemeOption {
 }
 
 const OPTIONS: ThemeOption[] = [
-  { value: 'system', label: '系统', icon: 'device-desktop' },
+  { value: 'system', label: '系统', icon: 'sun-moon' },
   { value: 'light', label: '浅色', icon: 'sun' },
   { value: 'dark', label: '深色', icon: 'moon' },
 ]
@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
     >
       <!-- The trigger icon follows html[data-theme-mode], so it is correct
            before hydration and never flashes the wrong glyph. -->
-      <Icon name="device-desktop" class="theme-mode-icon theme-mode-icon--system" :size="20" />
+      <Icon name="sun-moon" class="theme-mode-icon theme-mode-icon--system" :size="20" />
       <Icon name="sun" class="theme-mode-icon theme-mode-icon--light" :size="20" />
       <Icon name="moon" class="theme-mode-icon theme-mode-icon--dark" :size="20" />
     </MiuixIconButton>

@@ -1,10 +1,11 @@
-# Miuix Blog
+# Mifumi
 
-一个使用 **Nuxt 4**、**Nuxt Content v3**、**miuix-vue** 与 **Tailwind CSS v4** 构建的静态博客，部署目标为 GitHub Pages 项目站点。
+**Mifumi** 是 [AEBC08](https://github.com/AEBC08) 的个人博客，使用 **Nuxt 4**、**Nuxt Content v3**、**miuix-vue** 与 **Tailwind CSS v4** 构建，部署在 GitHub Pages：<https://aebc08.github.io/blog/>。
 
 ## 功能
 
-- 文件即文章：在 `content/blog/` 下新增 `.md` 即可发布
+- 文件即文章：在 `content/posts/` 下新增 `.md` 即可发布
+- 独立关于页：`content/pages/about.md` 提供 Markdown 内容，`app/pages/about.vue` 负责布局与 Vue 组件
 - `draft: true` 的文章不会出现在列表，直接访问也会返回 404
 - 顶部导航 + 侧边栏 widget + 主内容的响应式双栏布局
 - 亮色 / 暗色主题，首屏无闪烁，Mermaid 主题同步
@@ -44,11 +45,12 @@ pnpm new-post notes/nuxt-content
 
 ```text
 app/                  # Nuxt 4 源码目录（页面、组件、composables、样式）
-content/blog/         # Markdown 文章，嵌套目录自动成为嵌套 slug
+content/posts/        # Markdown 文章，嵌套目录自动成为嵌套 slug
+content/pages/        # 独立页面（关于页），由 pages 集合渲染
 public/               # 封面、头像、favicon、.nojekyll
 memory/               # 分类的技术决策记录（含索引）
 scripts/new-post.mjs  # 发帖脚本
-content.config.ts     # blog 集合与 schema
+content.config.ts     # blog / pages 集合与 schema
 nuxt.config.ts        # baseURL、Content、Mermaid、Tailwind、prerender 配置
 ```
 
@@ -118,7 +120,7 @@ MDC 组件示例：
 正文使用 MDC 行内组件语法插入图标：
 
 ```md
-系统主题： :icon{name="device-desktop"} 桌面
+系统主题： :icon{name="sun-moon"} 跟随系统
 miuix 图标： :icon{name="miuix:Folder"} 文件夹
 ```
 
@@ -146,16 +148,16 @@ pnpm preview
 - `npx nuxt build --preset github_pages`
 - `app.buildAssetsDir: 'nuxt_assets'`：避免 GitHub Pages 忽略 `_nuxt` 这类下划线目录
 - `public/.nojekyll`：关闭 Jekyll 处理
-- `nitro.prerender.autoSubfolderIndex: true`：生成 `blog/hello/index.html`，带尾斜杠刷新直接命中，无尾斜杠由静态服务器 301 到目录
+- `nitro.prerender.autoSubfolderIndex: true`：生成 `posts/hello/index.html`（对外 URL 为 `/blog/posts/hello/`），带尾斜杠刷新直接命中，无尾斜杠由静态服务器 301 到目录
 
 本地模拟子路径构建：
 
 ```bash
 # PowerShell
-$env:NUXT_APP_BASE_URL="/your-repo/"
+$env:NUXT_APP_BASE_URL="/blog/"
 pnpm exec nuxt build --preset github_pages
 
-# 用任意静态服务器托管 .output/public，并访问 /your-repo/
+# 用任意静态服务器托管 .output/public，并访问 /blog/
 ```
 
 如果使用自定义域名或用户站点（`<user>.github.io`），把 `NUXT_APP_BASE_URL` 设为 `/`。

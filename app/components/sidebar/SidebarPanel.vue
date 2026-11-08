@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const isPostPage = computed(() => /^\/blog\/[^/]+/.test(route.path))
+const isPostPage = computed(() => /^\/posts\/[^/]+/.test(route.path))
 const activeCategory = computed(() => typeof route.query.category === 'string'
   ? route.query.category
   : undefined)

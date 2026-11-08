@@ -18,9 +18,9 @@ Nuxt Content 会根据文件路径生成页面路径：
 
 | 文件 | 路径 |
 | --- | --- |
-| `content/blog/hello.md` | `/blog/hello` |
-| `content/blog/guide/index.md` | `/blog/guide` |
-| `content/blog/notes/nuxt/content.md` | `/blog/notes/nuxt/content` |
+| `content/posts/hello.md` | `/posts/hello` |
+| `content/posts/guide/index.md` | `/posts/guide` |
+| `content/posts/notes/nuxt/content.md` | `/posts/notes/nuxt/content` |
 
 嵌套目录不需要额外配置。`scripts/new-post.mjs` 会自动创建缺少的目录。
 

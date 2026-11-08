@@ -54,7 +54,7 @@ function goHome(): void {
                 回到首页
               </MiuixButton>
               <NuxtLink
-                to="/blog"
+                to="/posts"
                 class="inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-bg-soft px-5 py-2.5 text-sm font-semibold text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary"
               >
                 浏览文章

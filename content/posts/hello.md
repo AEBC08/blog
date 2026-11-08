@@ -1,7 +1,7 @@
 ---
-title: 你好，Miuix Blog
+title: 你好，Mifumi
 published: 2026-10-01T09:00:00.000Z
-description: 一个把 Nuxt Content 的写作体验与 miuix-vue 视觉语言放在一起的静态博客。
+description: 一个用 Nuxt Content 写作、用 miuix-vue 呈现的个人博客。
 tags:
   - Nuxt
   - Vue
@@ -13,7 +13,7 @@ layout: default
 lang: zh-CN
 ---
 
-这是一篇示例文章。它的存在证明了一件事：**在 `content/blog/` 下放一个 Markdown 文件，刷新页面，它就会出现在博客里。**
+这是一篇示例文章。它的存在证明了一件事：**在 `content/posts/` 下放一个 Markdown 文件，刷新页面，它就会出现在博客里。**
 
 ## 为什么是 Nuxt Content
 
@@ -36,7 +36,7 @@ const posts = await queryCollection('blog')
 - `layout: interactive` 可切换到 Vue 组件驱动的文章
 
 ::Callout{type="tip" title="从哪开始"}
-先读[写作指南](/blog/guide)，再看[语法展示](/blog/markdown-showcase)。
+先读[写作指南](/posts/guide)，再看[语法展示](/posts/markdown-showcase)，或者去[关于页](/about)认识我。
 ::
 
 ## 下一篇

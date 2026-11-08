@@ -21,7 +21,7 @@ lang: zh-CN
 Tabler 的 kebab-case，`:icon{name="miuix:Folder"}` 这样的 `miuix:` 前缀则会
 读取 miuix-vue 自带的扩展图标。
 
-- 系统主题： :icon{name="device-desktop"} 桌面
+- 系统主题： :icon{name="sun-moon"} 跟随系统
 - 浅色主题： :icon{name="sun"} 太阳
 - 深色主题： :icon{name="moon"} 月亮
 - miuix 图标： :icon{name="miuix:Folder"} 文件夹， :icon{name="miuix:Copy"} 复制， :icon{name="miuix:Ok"} 完成
@@ -114,7 +114,7 @@ Callout 的 `type` 支持 `info`、`tip`、`warning`、`danger`。
 ::LinkCard{title="Nuxt Content" description="用 Markdown 驱动的文件式 CMS。" href="https://content.nuxt.com" icon="brand-nuxt"}
 ::
 
-::LinkCard{title="miuix-vue" description="面向 Vue 3 的 HyperOS / miuix 组件库。" href="https://github.com/miuix-kotlin/miuix-vue" icon="brand-vue"}
+::LinkCard{title="miuix-vue" description="面向 Vue 3 的 HyperOS / miuix 组件库。" href="https://github.com/YuKongA/miuix-vue" icon="brand-vue"}
 ::
 
 ## GFM

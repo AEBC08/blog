@@ -1,23 +1,33 @@
+interface FriendLink {
+  name: string
+  href: string
+  description: string
+  icon?: string
+}
+
+const friends: FriendLink[] = []
+
 export default defineAppConfig({
   site: {
-    title: 'Miuix Blog',
-    description: '一个使用 Nuxt 4、Nuxt Content 与 miuix-vue 构建的静态博客。',
-    tagline: '写代码，也写关于代码的文字。',
-    author: 'Miuix',
+    title: 'Mifumi',
+    description: 'AEBC08 的个人博客，记录开发、工具与日常折腾。',
+    tagline: '记录开发、工具与日常折腾。',
+    author: 'AEBC08',
   },
   profile: {
-    name: 'Miuix',
-    bio: '写代码，也写关于代码的文字。',
+    name: 'AEBC08',
+    bio: '在 Mifumi 记录开发、工具与日常折腾。',
     avatar: '/covers/avatar.svg',
-    status: '正在写 Nuxt 与 miuix-vue',
+    status: '正在更新 Mifumi',
     links: [
-      { label: 'GitHub', href: 'https://github.com/', icon: 'brand-github' },
-      { label: 'RSS', href: '/blog', icon: 'rss' },
+      { label: 'GitHub', href: 'https://github.com/AEBC08', icon: 'brand-github' },
+      { label: '关于', href: '/about', icon: 'user' },
     ],
   },
+  friends,
   navigation: [
     { label: '首页', to: '/' },
-    { label: '文章', to: '/blog' },
-    { label: '指南', to: '/blog/guide' },
+    { label: '文章', to: '/posts' },
+    { label: '关于', to: '/about' },
   ],
 })

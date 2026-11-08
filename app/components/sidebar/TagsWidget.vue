@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<Props>(), {
         <NuxtLink
           v-for="term in props.terms"
           :key="term.name"
-          :to="{ path: '/blog', query: { tag: term.name } }"
+          :to="{ path: '/posts', query: { tag: term.name } }"
           class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs transition-colors"
           :class="props.active === term.name
             ? 'border-app-primary/30 bg-app-primary text-app-on-primary'

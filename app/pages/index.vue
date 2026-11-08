@@ -51,17 +51,18 @@ useSeoMeta({
 
             <div class="mt-6 flex flex-wrap items-center gap-3">
               <NuxtLink
-                to="/blog"
+                to="/posts"
                 class="inline-flex items-center gap-2 rounded-full bg-app-primary px-5 py-2.5 text-sm font-bold text-app-on-primary transition-colors hover:bg-app-primary/90"
               >
                 开始阅读
                 <Icon name="arrow-right" :size="16" />
               </NuxtLink>
               <NuxtLink
-                to="/blog/guide"
+                to="/about"
                 class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white"
               >
-                写作指南
+                <Icon name="user" :size="16" />
+                关于我
               </NuxtLink>
 
               <div class="flex items-center gap-5 text-white/60 sm:ml-auto">
@@ -113,7 +114,7 @@ useSeoMeta({
             </h2>
           </div>
           <NuxtLink
-            to="/blog"
+            to="/posts"
             class="group inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-card px-4 py-2 text-sm font-semibold text-app-text-variant shadow-sm transition-colors hover:border-app-primary/40 hover:text-app-primary"
           >
             全部文章
@@ -136,7 +137,7 @@ useSeoMeta({
                 按分类浏览
               </h2>
             </div>
-            <NuxtLink to="/blog" class="text-sm font-medium text-app-primary hover:underline">
+            <NuxtLink to="/posts" class="text-sm font-medium text-app-primary hover:underline">
               查看全部
             </NuxtLink>
           </div>
@@ -145,7 +146,7 @@ useSeoMeta({
             <NuxtLink
               v-for="category in categories"
               :key="category.name"
-              :to="{ path: '/blog', query: { category: category.name } }"
+              :to="{ path: '/posts', query: { category: category.name } }"
               class="inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-bg-soft px-3.5 py-2 text-sm font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary"
             >
               <Icon name="miuix:Folder" :size="14" />

@@ -4,7 +4,7 @@ export default defineContentConfig({
   collections: {
     blog: defineCollection({
       type: 'page',
-      source: 'blog/**/*.md',
+      source: 'posts/**/*.md',
       schema: z.object({
         published: z.date(),
         description: z.string().optional(),
@@ -14,6 +14,13 @@ export default defineContentConfig({
         image: z.string().optional(),
         lang: z.string().optional(),
         layout: z.enum(['default', 'interactive']).default('default'),
+      }),
+    }),
+    pages: defineCollection({
+      type: 'page',
+      source: 'pages/**/*.md',
+      schema: z.object({
+        description: z.string().optional(),
       }),
     }),
   },
