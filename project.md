@@ -1,3 +1,77 @@
+\## 交接状态（2026-11-08，优先阅读）
+
+
+
+\> 本节记录代码的真实状态与待办，\*\*与下方原始规范冲突时以本节为准\*\*。逐条决策与踩坑记录见 `memory/README.md`。
+
+
+
+\*\*当前提交\*\*：`df1aa3c`（`main`，`feat: rebrand to AEBC08 and add GitHub repo card`）。没有 remote，GitHub 仓库 `AEBC08/blog` 尚未创建，推送与部署按用户要求暂停。
+
+
+
+\*\*已落地、与下方旧规范不同的地方\*\*：
+
+
+
+\- 内容目录是 `content/posts/`，不是 `content/blog/`；公开路由是 `/posts/...`，不是 `/blog/...`。部署前缀本身已是 `/blog/`，改路由是为了避免 `/blog/blog`，详见 `memory/deployment/004`
+
+\- 源码在 Nuxt 4 的 `app/` 下：`app/components/`、`app/pages/`、`app/composables/`、`app/utils/`，不存在顶层 `components/` / `pages/`
+
+\- 站点标题、作者、`profile.name` 都是 \*\*AEBC08\*\*；Mifumi 仅作为博客框架名出现在关于页与 README
+
+\- 关于页走 `pages` 集合：`content/pages/about.md` 提供正文，`app/pages/about.vue` 提供外壳；公开路由 `/about`，Content 路径 `/pages/about`
+
+\- 主题色是 miuix-vue 默认值，且拆成了填充色与文字色两个令牌：`--app-primary`（浅 `#3482ff` / 暗 `#277af7`）用于按钮、圆点、边框；`--app-primary-text`（浅 `#2569d6` / 暗 `#8ab4ff`）用于文字、图标、链接。新增强调色文字不要用 `text-app-primary`
+
+\- MDC 组件在 `app/components/content/`：`Callout`、`Spoiler`、`LinkCard`（`ClientOnly`）、`GithubRepo`、`FriendLinks`、`InteractivePost`、`ProseH2`、`ProsePre`、`ProseTable`、`ProseLi`
+
+\- 静态资产：头像 `public/covers/avatar.png`（GitHub 下载的本地副本）、横幅 `public/banner.svg`、favicon `public/favicon.svg`
+
+\- 构建验证命令：`$env:NUXT\_APP\_BASE\_URL='/blog/'; pnpm exec nuxt build --preset github\_pages`，产物在 `.output/public`（已 gitignore）
+
+
+
+\## 本轮待实现（用户最后一次需求，代码均未改动）
+
+
+
+按优先级排列，每条都有对应的 memory 记录，含选项与后果，实施前先读：
+
+
+
+1\. \*\*顶栏与页脚头像\*\*：现在还是字母 `A` 方块，用户要求显示 GitHub 头像。用 `resolveCoverImage(appConfig.profile.avatar)` 拼 `baseURL`，保留字母兜底，详见 `memory/layout/009`
+
+2\. \*\*页脚改为超链接文本\*\*：Nuxt 4 / Nuxt Content / miuix-vue / GitHub Pages 四项改成 `<a>`，统一 `target="_blank"` + `rel="noopener noreferrer"`，详见 `memory/layout/009`
+
+3\. \*\*全站内容声明 CC BY-NC-SA 4.0\*\*：页脚协议行 + 关于页 + README + `package.json` 的 `license`，链接到 `https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans`，详见 `memory/content/007`
+
+4\. \*\*`GithubRepo` 扩展\*\*：新增 `forks`、`license`、`show-avatar`（默认 `false`）、`avatar`（覆盖头像地址），仍用静态 props，不请求 GitHub API，详见 `memory/content/005`
+
+5\. \*\*`LinkCard` 图标背景\*\*：新增 `icon-bg`、`icon-color`，默认\*\*无背景色\*\*（透明），用内联 style 支持任意 CSS 颜色，详见 `memory/content/006`
+
+6\. \*\*可选、未开工\*\*：顶栏「自定义选项弹窗」（不只是调色）。要做的话扩展现有 `useTheme`，不要新建第二套主题状态，详见 `memory/layout/008` 的后果部分
+
+
+
+\*\*改完必须验证\*\*：
+
+
+
+\- `pnpm lint`、`pnpm typecheck` 零错误
+
+\- 子路径构建 + Node 静态服务器，明暗两套各看一遍 `/blog/`、`/blog/about`、`/blog/posts`、`/blog/posts/markdown-showcase`
+
+\- 顶栏/页脚构建产物里应有 `covers/avatar.png` 的 `<img>`，且不再有 `<span ...>A</span>`
+
+\- 页脚技术栈与协议都是 `<a href>`，外链带 `rel="noopener noreferrer"`
+
+\- `GithubRepo` 不传可选 props 时不渲染空标签；`LinkCard` 不传 `icon-bg` 时计算样式 `background-color` 为 `rgba(0, 0, 0, 0)`
+
+\- 移动端 390px 宽页脚不横向溢出，无 console error、无 4xx/5xx
+
+
+
 \## 项目目标
 
 

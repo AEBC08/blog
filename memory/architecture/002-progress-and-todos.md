@@ -97,6 +97,25 @@
 - 新增 `app/components/content/GithubRepo.vue`：`::GithubRepo{repo="owner/name" description="..." language="..." stars="..."}`，在 `about.md` 与 `markdown-showcase.md` 中使用
 - `content/posts/hello.md` 标题改为「你好，这里是 AEBC08」，正文提一句 Mifumi 框架
 
+### 待实现（交接给下一个 agent）
+
+上一轮提交停在 `df1aa3c`，以下需求已写好决策记录但**代码尚未改动**：
+
+1. 顶栏/页脚头像：字母 `A` 方块换成 `avatar.png`，带 `resolveCoverImage` 与字母兜底，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
+2. 页脚技术栈改为超链接文本（Nuxt / Nuxt Content / miuix-vue / GitHub Pages），统一外链属性，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
+3. 全站内容声明 **CC BY-NC-SA 4.0**：页脚协议行 + 关于页 + README + `package.json` 的 `license`，见 [content/007](../content/007-site-license-cc-by-nc-sa.md)。
+4. `GithubRepo` 增加 `forks` / `license` / `show-avatar` / `avatar`，见 [content/005](../content/005-github-repo-card-fields.md)。
+5. `LinkCard` 增加 `icon-bg` / `icon-color`，默认无背景色，见 [content/006](../content/006-linkcard-icon-background.md)。
+6. 未开工的可选项：顶栏「自定义选项弹窗」（见 [layout/008](../layout/008-miuix-default-primary.md) 后果部分）。
+
+验收要求：改完必须跑 `pnpm lint`、`pnpm typecheck`，并用 `NUXT_APP_BASE_URL=/blog/ pnpm exec nuxt build --preset github_pages` + Node 静态服务器在明暗两套下验证，重点看：
+
+- 顶栏/页脚头像是否真的渲染 `<img>`（构建产物 `index.html` 里应有 `covers/avatar.png`，且没有 `<span ...>A</span>`）
+- 页脚四项技术栈与协议链接是否都是 `<a href>`，外链是否带 `rel="noopener noreferrer"`
+- `GithubRepo` 缺省值（不传 `forks` / `license` / `show-avatar`）时不会渲染空标签
+- `LinkCard` 不传 `icon-bg` 时容器 `background-color` 为 `rgba(0, 0, 0, 0)`，传了之后计算样式等于所传颜色
+- 移动端 390px 宽下页脚不横向溢出
+
 ### 文档
 
 - 根 `README.md`：写作、frontmatter、Markdown 限制、部署说明
@@ -107,6 +126,7 @@
 - 新增 `layout/006`（图标系统）与 `markdown/006`（Mermaid 生成主题）；`ssr/004` 的 on-primary 部分标记为部分废弃；`markdown/003`、`markdown/004`、`markdown/005` 补充后续修订；更新索引与跨目录关联
 - 新增 `architecture/003`（Mifumi 身份）、`content/003`（关于页与 `pages` 集合）、`deployment/004`（`/blog/` 前缀冲突与 `/posts` 路由）、`layout/007`（`sun-moon` 与滑块阴影）；更新索引与跨目录关联
 - 新增 `architecture/004`（站点身份修正为 AEBC08）、`layout/008`（miuix 默认主题色）、`content/004`（`GithubRepo` MDC 组件）；`architecture/003` 标记为部分废弃；更新索引与跨目录关联
+- 新增 `layout/009`（顶栏/页脚头像与页脚超链接）、`content/005`（`GithubRepo` 字段扩展）、`content/006`（`LinkCard` 图标背景）、`content/007`（CC BY-NC-SA 4.0 声明），四条均为**待实现**交接记录；`architecture/002` 增加「待实现」章节与验收清单；更新索引与跨目录关联
 
 ## 已验证
 
@@ -187,7 +207,7 @@
 
 ## 遗留风险与后续
 
-1. 本地已 `git init`，最新提交为 `7fb52c6`（`main`），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建仓库，部署按用户要求暂停；AEBC08 身份修正、主题色与 `GithubRepo` 改动仍是未提交状态。
+1. 本地已 `git init`，最新提交为 `df1aa3c`（`main`，`feat: rebrand to AEBC08 and add GitHub repo card`），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建 `AEBC08/blog` 仓库，部署按用户要求暂停。本轮交接的 6 项需求（头像、页脚链接、许可协议、GithubRepo 字段、LinkCard 背景、自定义弹窗）**代码尚未实现**，详见「待实现」章节。
 2. `miuix-vue` 的 Nitro alias/inline 是版本相关修复，升级后需重新验证预渲染，详见 [ssr/003](../ssr/003-nitro-vue-duplicate.md)。
 3. `pnpm peers check` 报告非致命 peer 警告（`oxc-parser >=0.140.0`、`typescript >=6.0.0`）；TypeScript 有意保持在 5.9.3。
 4. `LinkCard` 按要求包在 `<ClientOnly>` 中，静态 HTML 不包含卡片内容，水合后才出现。
@@ -206,5 +226,7 @@
 17. 覆盖 miuix-vue 组件时优先只改 CSS 变量；`sun-moon` 与滑块阴影的教训见 [layout/007](../layout/007-theme-icon-and-slider-audit.md)，不要再给上游组件追加非必要阴影或尺寸。
 18. 头像是从 GitHub 下载的本地副本（`public/covers/avatar.png`），不会自动跟随 GitHub 更新；更换头像后需要重新下载覆盖，详见 [architecture/004](../architecture/004-site-identity-aebc08.md)。
 19. 强调色已拆成填充色 `--app-primary` 与文字色 `--app-primary-text`：文字、图标、链接用后者，按钮/圆点/边框等填充仍用前者。新增强调色文字时不要直接用 `text-app-primary`，否则浅色 `#3482ff` 在 `#eaf2ff` 上只有 3.22:1、暗色 `#277af7` 在 `#2b3b54` 上只有 2.81:1，详见 [layout/008](../layout/008-miuix-default-primary.md)。
-20. `GithubRepo` 的 Star 数与语言是静态 props，不会自动从 GitHub API 更新；需要准确数据时手动修改，或在构建期抓取并保留 props 作为覆盖值，详见 [content/004](../content/004-github-repo-mdc-card.md)。
+20. `GithubRepo` 的 Star 数、语言、Fork 数与许可证都是静态 props，不会自动从 GitHub API 更新；需要准确数据时手动修改，或在构建期抓取并保留 props 作为覆盖值，详见 [content/004](../content/004-github-repo-mdc-card.md) 与 [content/005](../content/005-github-repo-card-fields.md)。
 21. 顶栏暂未实现「自定义选项弹窗」；当前仍是 `ThemeToggle` 三态菜单 + miuix 默认主题色。若要做运行时调色，应扩展现有 `useTheme`，避免出现两套主题状态。
+22. `LinkCard` 的图标背景一旦改为可配置（[content/006](../content/006-linkcard-icon-background.md)），默认值必须保持透明；已有 Markdown 若想保留主色方块，需要显式写 `icon-bg`，不要改组件默认值来迁就旧内容。
+23. 顶栏/页脚的头像依赖 `public/covers/avatar.png`，属于本地副本；`TopBar` / `FooterBar` 改造时务必用 `resolveCoverImage()` 拼 `baseURL`，否则子路径部署下会 404（见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)）。

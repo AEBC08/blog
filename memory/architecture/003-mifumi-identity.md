@@ -1,6 +1,6 @@
 # 项目定名 Mifumi 与站点身份信息
 
-> **部分废弃**：站点标题后来改为 **AEBC08**，Mifumi 仅作为框架名保留，详见 [004 站点身份修正](004-site-identity-aebc08.md)。本记录中的 GitHub 链接、部署地址、导航与 `/posts` 相关决定仍然有效。
+> **部分废弃**：站点标题后来改为 **AEBC08**，Mifumi 仅作为框架名保留，详见 [004 站点身份修正](004-site-identity-aebc08.md)。本记录中的 GitHub 链接、部署地址、导航与 `/posts` 相关决定仍然有效。顶栏/页脚的字母 Logo 也将在后续改为 GitHub 头像，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
 
 - 日期：2026-11-08
 - 状态：采纳

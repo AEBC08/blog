@@ -1,7 +1,7 @@
 # 站点身份修正：站点叫 AEBC08，Mifumi 是框架名
 
 - 日期：2026-11-08
-- 状态：采纳
+- 状态：部分废弃（顶栏/页脚 Logo 部分待改，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)）
 - 相关文件：`app/app.config.ts`、`nuxt.config.ts`、`README.md`、`content/pages/about.md`、`content/posts/hello.md`、`app/components/layout/TopBar.vue`、`app/components/layout/FooterBar.vue`、`public/banner.svg`、`public/favicon.svg`、`public/covers/avatar.png`
 
 ## 背景
@@ -41,5 +41,6 @@
 
 - [architecture/003](003-mifumi-identity.md) 的「站点标题 = Mifumi」部分已被本记录取代，其余身份信息（GitHub 链接、部署地址、导航）仍然有效。
 - 头像是本地副本，不会随 GitHub 头像自动更新；更换头像后需要重新下载并覆盖 `public/covers/avatar.png`。
+- `TopBar` / `FooterBar` 的字母 `A` 只是临时方案：用户后续要求这两处也显示 GitHub 头像，实施方式见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
 - 站点标题与作者都是 AEBC08，页脚版权显示为「© 年份 AEBC08」。
 - Mifumi 只作为框架名出现在关于页、README 与文章正文中，不再出现在浏览器标题栏。
