@@ -103,7 +103,7 @@
 
 1. 顶栏/页脚头像：`TopBar` / `FooterBar` 改用 `covers/avatar.jpg`，`resolveCoverImage` 拼 baseURL，保留首字母兜底与暗色描边，见 [layout/009](../layout/009-topbar-footer-avatar-and-footer-links.md)。
 2. 页脚技术栈改为 `<a>`（Nuxt / Nuxt Content / miuix-vue / GitHub Pages），统一 `target="_blank" rel="noopener noreferrer"`，并新增「© 年份 AEBC08 + CC BY-NC-SA 4.0」一行。
-3. 全站声明 **CC BY-NC-SA 4.0**：页脚、关于页、README、`package.json` 的 `license`，见 [content/007](../content/007-site-license-cc-by-nc-sa.md)。
+3. 声明 **CC BY-NC-SA 4.0**：页脚、关于页、README 声明内容协议（后来按 [content/010](../content/010-code-mit-content-cc.md) 拆成「代码 MIT + 内容 CC」），见 [content/007](../content/007-site-license-cc-by-nc-sa.md)。
 4. `GithubRepo` 的语言 / Star / Fork / 许可证改为构建期读 GitHub API 并逐项开关，`show-avatar` 可选，见 [content/008](../content/008-github-repo-api-fetch.md)。原先手填字段的 [content/005](../content/005-github-repo-card-fields.md) 已废弃。
 5. `LinkCard` 新增 `icon-bg` / `icon-color`，默认无背景色，见 [content/006](../content/006-linkcard-icon-background.md)。
 6. 标签页图标改为头像，头像文件由 `avatar.png` 改名为 `avatar.jpg`，见 [architecture/005](../architecture/005-favicon-and-avatar-file.md)。

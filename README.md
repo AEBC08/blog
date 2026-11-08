@@ -167,7 +167,8 @@ pnpm exec nuxt build --preset github_pages
 
 ## 许可
 
-本站文字与图片除特别注明外，均采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans) 许可协议：允许署名转载与改编，但不得用于商业目的，衍生作品需以相同协议共享。
+- **代码**（`.vue` / `.ts` / 配置与脚本等）采用 [MIT](LICENSE) 许可协议，`package.json` 的 `license` 字段同为 `MIT`。
+- **内容**（`content/` 下的文章与 `public/` 下的封面等创作内容）除特别注明外，采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans)：允许署名转载与改编，但不得用于商业目的，衍生作品需以相同协议共享。
 
-`package.json` 的 `license` 字段同样声明 `CC-BY-NC-SA-4.0`，仅描述本仓库的内容；Nuxt、miuix-vue、Tabler 图标等依赖仍遵循各自的上游许可证（如 miuix-vue 为 Apache-2.0）。
+Nuxt、Nuxt Content、miuix-vue、Tabler 图标等依赖仍遵循各自的上游许可证（如 miuix-vue 为 Apache-2.0），与本仓库的 MIT 无关。
 

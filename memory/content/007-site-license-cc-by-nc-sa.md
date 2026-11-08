@@ -1,7 +1,7 @@
 # 全站内容使用 CC BY-NC-SA 4.0 许可协议
 
 - 日期：2026-11-08
-- 状态：已实现（detail 见 memory/README）
+- 状态：部分废弃（整仓库 CC 被 content/010 改为「代码 MIT + 内容 CC」）
 - 相关文件：`app/components/layout/FooterBar.vue`、`README.md`、`content/pages/about.md`、`package.json`
 
 ## 背景

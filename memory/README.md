@@ -32,9 +32,10 @@
 - [004 GithubRepo：Markdown 里的 GitHub 仓库卡片](content/004-github-repo-mdc-card.md)：新增 `::GithubRepo{repo="owner/name"}` MDC 组件，支持描述、语言、Star 与自定义链接。
 - [005 GithubRepo 字段扩展：Fork 数、许可证与可选作者头像](content/005-github-repo-card-fields.md)：**已废弃**。曾用手填静态字段，被 008 的构建期 API 抓取取代。
 - [006 LinkCard 图标背景色可配置，默认无背景](content/006-linkcard-icon-background.md)：**已实现**。新增 `icon-bg` / `icon-color`，默认透明，用内联样式支持任意颜色。
-- [007 全站内容使用 CC BY-NC-SA 4.0 许可协议](content/007-site-license-cc-by-nc-sa.md)：**已实现**。页脚、关于页、README 与 `package.json` 已同步声明协议。
+- [007 全站内容使用 CC BY-NC-SA 4.0 许可协议](content/007-site-license-cc-by-nc-sa.md)：**部分废弃**。页脚、关于页、README 的 CC 声明仍然有效，但 `package.json` 改成 MIT，见 010。
 - [008 GithubRepo 改为构建期读取 GitHub API](content/008-github-repo-api-fetch.md)：语言 / Star / Fork / 许可证与头像在预渲染时抓取并写进 payload，逐项可关，失败回落静态 props。
 - [009 友链改用 MDC LinkCard，删除 FriendLinks 组件](content/009-friends-via-linkcard.md)：关于页保持 Markdown + Vue 混合，友链改为 `about.md` 里的 `::LinkCard`。
+- [010 代码用 MIT，内容用 CC BY-NC-SA 4.0](content/010-code-mit-content-cc.md)：新增根 `LICENSE`，`package.json` 改 `MIT`，CC 只覆盖 `content/` 与 `public/` 下的创作内容。
 
 ### markdown
 
@@ -95,3 +96,4 @@
 - [content/008](content/008-github-repo-api-fetch.md) 取代 [content/005](content/005-github-repo-card-fields.md)，依赖 [layout/006](layout/006-icon-system.md) 新增的 `license` 图标；其构建期抓取与 [deployment/006](deployment/006-github-pages-setup.md) 注入的 `GITHUB_TOKEN` 配套。
 - [content/009](content/009-friends-via-linkcard.md) 取代 [content/003](content/003-about-page-pages-collection.md) 里的 `FriendLinks` 区块，复用 [content/006](content/006-linkcard-icon-background.md) 的图标样式；关于页仍是 Markdown + Vue 混合。
 - [deployment/005](deployment/005-git-bash-base-url.md) 是 [deployment/004](deployment/004-baseurl-blog-route-collision.md) 的构建侧补充：同一个 `/blog/` 前缀在 PowerShell 与 Git Bash 下的两种行为。
+- [content/010](content/010-code-mit-content-cc.md) 修订 [content/007](content/007-site-license-cc-by-nc-sa.md) 的许可范围：CC 声明保留给内容，仓库本身改为 MIT，`GithubRepo` 卡片读到的 `license` 也随之变成 MIT。
