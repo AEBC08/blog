@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
   <h2 :id="props.id" class="group">
     <a v-if="props.id" :href="`#${props.id}`" class="text-app-text! no-underline!">
       <slot />
-      <Icon name="hash" class="ml-2 text-app-primary opacity-0 transition-opacity group-hover:opacity-100" :size="16" />
+      <Icon name="hash" class="ml-2 text-app-primary-text opacity-0 transition-opacity group-hover:opacity-100" :size="16" />
     </a>
     <slot v-else />
   </h2>

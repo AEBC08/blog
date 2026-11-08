@@ -16,7 +16,7 @@ const props = defineProps<Props>()
 
   <MiuixCard v-else>
     <div class="flex flex-col items-center justify-center px-6 py-14 text-center">
-      <span class="grid size-12 place-items-center rounded-2xl bg-app-primary-soft text-app-primary">
+      <span class="grid size-12 place-items-center rounded-2xl bg-app-primary-soft text-app-primary-text">
         <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5v-13Z" />
           <path d="M8 9h8M8 13h5" />

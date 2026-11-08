@@ -250,7 +250,7 @@ export default defineNuxtConfig({
     buildAssetsDir: 'nuxt_assets',
     head: {
       htmlAttrs: { lang: 'zh-CN' },
-      title: 'Mifumi',
+      title: 'AEBC08',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: 'AEBC08 的个人博客，记录开发、工具与日常折腾。' },

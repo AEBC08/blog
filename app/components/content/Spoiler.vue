@@ -12,9 +12,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <details class="group my-6 overflow-hidden rounded-2xl border border-app-divider bg-app-card" :open="props.open">
-    <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 text-sm font-semibold text-app-text transition-colors hover:text-app-primary">
+    <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 text-sm font-semibold text-app-text transition-colors hover:text-app-primary-text">
       <span class="flex items-center gap-2">
-        <Icon name="bookmark" class="text-app-primary" :size="16" />
+        <Icon name="bookmark" class="text-app-primary-text" :size="16" />
         {{ props.label }}
       </span>
       <Icon name="chevron-down" class="shrink-0 text-app-text-faint transition-transform duration-300 group-open:rotate-180" :size="16" />

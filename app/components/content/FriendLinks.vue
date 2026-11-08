@@ -11,7 +11,7 @@ const github = computed(() =>
   <section class="mt-10 border-t border-app-divider pt-8">
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="text-xs font-medium text-app-primary">
+        <p class="text-xs font-medium text-app-primary-text">
           Links
         </p>
         <h2 class="mt-1 text-xl font-bold text-app-text">
@@ -23,7 +23,7 @@ const github = computed(() =>
         :href="github"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-bg-soft px-3 py-1.5 text-xs font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary"
+        class="inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-bg-soft px-3 py-1.5 text-xs font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary-text"
       >
         <Icon name="arrow-up-right" :size="14" />
         交换友链
@@ -39,11 +39,11 @@ const github = computed(() =>
         rel="noopener noreferrer"
         class="group flex items-start gap-3 rounded-2xl border border-app-divider bg-app-bg-soft p-4 transition-colors hover:border-app-primary/40"
       >
-        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-app-primary-soft text-app-primary">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-app-primary-soft text-app-primary-text">
           <Icon :name="friend.icon ?? 'world'" :size="16" />
         </span>
         <span class="min-w-0">
-          <span class="block truncate text-sm font-semibold text-app-text transition-colors group-hover:text-app-primary">
+          <span class="block truncate text-sm font-semibold text-app-text transition-colors group-hover:text-app-primary-text">
             {{ friend.name }}
           </span>
           <span class="mt-0.5 block text-xs leading-5 text-app-text-variant">

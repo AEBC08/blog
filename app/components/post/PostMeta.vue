@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
       v-for="tag in props.tags"
       :key="tag"
       :to="{ path: '/posts', query: { tag } }"
-      class="inline-flex items-center gap-1 rounded-full border border-app-divider bg-app-bg-soft px-2.5 py-1 text-xs text-app-text-faint transition-colors hover:border-app-primary/40 hover:text-app-primary"
+      class="inline-flex items-center gap-1 rounded-full border border-app-divider bg-app-bg-soft px-2.5 py-1 text-xs text-app-text-faint transition-colors hover:border-app-primary/40 hover:text-app-primary-text"
     >
       <Icon name="tag" :size="12" />
       {{ tag }}

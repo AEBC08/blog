@@ -22,7 +22,10 @@
   --app-text-soft: #565d6b;
   --app-text-faint: #8b919c;
   --app-primary: #3482ff;
-  --app-primary-soft: #e8f1ff;
+  --app-primary-soft: #eaf2ff;
+  /* Readable accent for text/icons. The fill colour above is tuned for white
+   * content, so it is too light for small text on the soft tint. */
+  --app-primary-text: #2569d6;
   --app-on-primary: #ffffff;
   --app-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -18px rgb(15 23 42 / 0.18);
   --app-shadow-hover: 0 2px 4px rgb(15 23 42 / 0.05), 0 16px 36px -22px rgb(15 23 42 / 0.24);
@@ -40,8 +43,11 @@
   --app-text: #f2f3f5;
   --app-text-soft: #b4b8c0;
   --app-text-faint: #7f848d;
-  --app-primary: #6ea8ff;
-  --app-primary-soft: rgb(110 168 255 / 0.14);
+  --app-primary: #277af7;
+  --app-primary-soft: #2b3b54;
+  /* Darker fills lose contrast as text, so accent text switches to a lighter
+   * blue while buttons, dots and bars keep the miuix primary. */
+  --app-primary-text: #8ab4ff;
   /* Filled controls keep white content in both themes so the switch and
    * slider thumbs match the rest of the miuix surfaces. */
   --app-on-primary: #ffffff;
@@ -79,7 +85,7 @@
   --m-color-primary: var(--app-primary);
   --m-color-on-primary: var(--app-on-primary);
   --m-color-tertiary-container: var(--app-primary-soft);
-  --m-color-on-tertiary-container: var(--app-primary);
+  --m-color-on-tertiary-container: var(--app-primary-text);
   --m-color-disabled-primary: color-mix(in srgb, var(--app-primary) 42%, var(--app-bg));
   --m-color-disabled-on-primary: var(--app-text-faint);
   --m-color-disabled-primary-button: color-mix(in srgb, var(--app-primary) 42%, var(--app-bg));
@@ -122,7 +128,7 @@
   --m-color-primary: var(--app-primary);
   --m-color-on-primary: var(--app-on-primary);
   --m-color-tertiary-container: var(--app-primary-soft);
-  --m-color-on-tertiary-container: var(--app-primary);
+  --m-color-on-tertiary-container: var(--app-primary-text);
   --m-color-disabled-primary: color-mix(in srgb, var(--app-primary) 38%, var(--app-bg));
   --m-color-disabled-on-primary: var(--app-text-faint);
   --m-color-disabled-primary-button: color-mix(in srgb, var(--app-primary) 38%, var(--app-bg));
@@ -157,9 +163,10 @@
   --color-app-divider: var(--app-border);
   --color-app-primary: var(--app-primary);
   --color-app-on-primary: var(--app-on-primary);
+  --color-app-primary-text: var(--app-primary-text);
   --color-app-primary-soft: var(--app-primary-soft);
   --color-app-primary-container: var(--app-primary-soft);
-  --color-app-on-primary-container: var(--app-primary);
+  --color-app-on-primary-container: var(--app-primary-text);
   --radius-app: 1rem;
   --font-sans: 'MiSans', 'HarmonyOS Sans SC', 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Maple Mono', 'MiSans', 'HarmonyOS Sans SC', 'Noto Sans SC', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -255,7 +262,7 @@
   gap: 0.35rem;
   border-radius: 9999px;
   background: var(--app-primary-soft);
-  color: var(--app-primary);
+  color: var(--app-primary-text);
   font-size: 0.75rem;
   font-weight: 600;
   line-height: 1;
@@ -466,16 +473,16 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
 }
 
 .post-content a {
-  color: var(--app-primary);
+  color: var(--app-primary-text);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--app-primary) 42%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--app-primary-text) 42%, transparent);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
   transition: color 0.16s ease, text-decoration-color 0.16s ease;
 }
 
 .post-content a:hover {
-  color: color-mix(in srgb, var(--app-primary) 82%, var(--app-text));
+  color: color-mix(in srgb, var(--app-primary-text) 82%, var(--app-text));
   text-decoration-color: currentColor;
 }
 
@@ -511,7 +518,7 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
 }
 
 .post-content li::marker {
-  color: var(--app-primary);
+  color: var(--app-primary-text);
 }
 
 .post-content blockquote {
@@ -615,7 +622,7 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
 .prose-copy:hover,
 .prose-copy.is-copied {
   border-color: color-mix(in srgb, var(--app-primary) 45%, var(--app-border));
-  color: var(--app-primary);
+  color: var(--app-primary-text);
 }
 
 .prose-copy:focus-visible {

@@ -1,5 +1,5 @@
 ---
-title: 你好，Mifumi
+title: 你好，这里是 AEBC08
 published: 2026-10-01T09:00:00.000Z
 description: 一个用 Nuxt Content 写作、用 miuix-vue 呈现的个人博客。
 tags:
@@ -13,7 +13,7 @@ layout: default
 lang: zh-CN
 ---
 
-这是一篇示例文章。它的存在证明了一件事：**在 `content/posts/` 下放一个 Markdown 文件，刷新页面，它就会出现在博客里。**
+这是一篇示例文章。它的存在证明了一件事：**在 `content/posts/` 下放一个 Markdown 文件，刷新页面，它就会出现在博客里。** 这个博客基于 **Mifumi** 框架构建。
 
 ## 为什么是 Nuxt Content
 
@@ -32,7 +32,7 @@ const posts = await queryCollection('blog')
 - 桌面端两栏、移动端单列，侧边栏自动下移
 - 亮色 / 暗色主题，首屏无闪烁
 - KaTeX 公式、Shiki 代码高亮、Mermaid 图表
-- 通过 MDC 组件插入 Callout、Spoiler 与 LinkCard
+- 通过 MDC 组件插入 Callout、Spoiler、LinkCard 与 GitHub 仓库卡片
 - `layout: interactive` 可切换到 Vue 组件驱动的文章
 
 ::Callout{type="tip" title="从哪开始"}

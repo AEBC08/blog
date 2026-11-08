@@ -33,7 +33,7 @@ useSeoMeta({
               height="64"
             >
             <div>
-              <p class="text-xs font-medium text-app-primary">
+              <p class="text-xs font-medium text-app-primary-text">
                 About
               </p>
               <h1 class="mt-1 text-3xl font-bold leading-tight text-app-text sm:text-4xl">

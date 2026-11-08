@@ -20,7 +20,7 @@ const avatar = resolveCoverImage(appConfig.profile.avatar)
       <h2 class="mt-3 text-lg font-bold text-app-text">
         {{ appConfig.profile.name }}
       </h2>
-      <p v-if="appConfig.profile.status" class="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium text-app-primary">
+      <p v-if="appConfig.profile.status" class="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium text-app-primary-text">
         <span class="inline-block size-1.5 rounded-full bg-emerald-500" />
         {{ appConfig.profile.status }}
       </p>
@@ -35,7 +35,7 @@ const avatar = resolveCoverImage(appConfig.profile.avatar)
           :to="link.href"
           :target="link.href.startsWith('http') ? '_blank' : undefined"
           :rel="link.href.startsWith('http') ? 'noopener noreferrer' : undefined"
-          class="inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-bg-soft px-3 py-1.5 text-xs font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary"
+          class="inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-bg-soft px-3 py-1.5 text-xs font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary-text"
         >
           <Icon :name="link.icon" :size="14" />
           {{ link.label }}

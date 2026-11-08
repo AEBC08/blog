@@ -1,6 +1,8 @@
-# Mifumi
+# AEBC08 的个人博客
 
-**Mifumi** 是 [AEBC08](https://github.com/AEBC08) 的个人博客，使用 **Nuxt 4**、**Nuxt Content v3**、**miuix-vue** 与 **Tailwind CSS v4** 构建，部署在 GitHub Pages：<https://aebc08.github.io/blog/>。
+这是 [AEBC08](https://github.com/AEBC08) 的个人博客，使用 **Mifumi** 框架构建：**Nuxt 4**、**Nuxt Content v3**、**miuix-vue** 与 **Tailwind CSS v4**，部署在 GitHub Pages：<https://aebc08.github.io/blog/>。
+
+Mifumi 是这个博客使用的静态博客框架名称。
 
 ## 功能
 
@@ -10,7 +12,7 @@
 - 顶部导航 + 侧边栏 widget + 主内容的响应式双栏布局
 - 亮色 / 暗色主题，首屏无闪烁，Mermaid 主题同步
 - KaTeX 数学公式、Shiki 双主题代码高亮、Mermaid 图表
-- MDC 组件：`Callout`、`Spoiler`、`LinkCard`（`ClientOnly`）
+- MDC 组件：`Callout`、`Spoiler`、`LinkCard`（`ClientOnly`）与 `GithubRepo` 仓库卡片
 - 统一图标系统：`Icon` 组件 + Tabler / miuix 图标注册表，正文可用 `:icon{name="..."}` 内联
 - 自定义 `ProseH2` 覆盖生效
 - `layout: interactive` 的文章由 Vue 组件渲染

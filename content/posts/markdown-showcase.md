@@ -117,6 +117,11 @@ Callout 的 `type` 支持 `info`、`tip`、`warning`、`danger`。
 ::LinkCard{title="miuix-vue" description="面向 Vue 3 的 HyperOS / miuix 组件库。" href="https://github.com/YuKongA/miuix-vue" icon="brand-vue"}
 ::
 
+## GitHub 仓库卡片
+
+::GithubRepo{repo="nuxt/content" description="Nuxt 的文件式 CMS，本站内容层的基础。" language="TypeScript"}
+::
+
 ## GFM
 
 | 特性 | 是否支持 |

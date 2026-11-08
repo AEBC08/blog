@@ -86,6 +86,17 @@
 - 删除 `.demo-slider .m-slider__thumb` 的自加阴影，滑块只保留颜色令牌覆盖
 - `content/posts/markdown-showcase.md` 的系统主题图标示例同步改为 `sun-moon`
 
+### 身份修正、miuix 默认主题色与 GithubRepo
+
+- 站点标题与作者改为 **AEBC08**（`site.title` / `site.author` / `profile.name` / `nuxt.config.ts` head），Mifumi 仅作为博客框架名出现在关于页与 README；上一节「站点身份 = Mifumi」的表述已被 `architecture/004` 修正
+- `TopBar` / `FooterBar` 字母 Logo 改为 `A`；`public/banner.svg` 文字改为 `AEBC08`、装饰改为 `A` 形；`public/favicon.svg` 字母改为 `A`
+- 头像从 `https://github.com/AEBC08.png?size=200` 下载为 `public/covers/avatar.png`，`profile.avatar` 改为该路径，删除旧的 `avatar.svg`
+- `content/pages/about.md` 改为「我是 AEBC08，这里是我的个人博客」，并说明「这个博客使用的框架叫 Mifumi」
+- 主题色对齐 miuix 默认：浅色 `--app-primary: #3482ff` / `--app-primary-soft: #eaf2ff`，暗色 `--app-primary: #277af7` / `--app-primary-soft: #2b3b54`
+- 新增文字强调色令牌 `--app-primary-text`：浅色 `#2569d6`、暗色 `#8ab4ff`；所有 `text-app-primary` 改为 `text-app-primary-text`，正文链接、`.chip`、列表 marker 与代码复制按钮同步改用该令牌，`--m-color-on-tertiary-container` / `--color-app-on-primary-container` 也映射到它
+- 新增 `app/components/content/GithubRepo.vue`：`::GithubRepo{repo="owner/name" description="..." language="..." stars="..."}`，在 `about.md` 与 `markdown-showcase.md` 中使用
+- `content/posts/hello.md` 标题改为「你好，这里是 AEBC08」，正文提一句 Mifumi 框架
+
 ### 文档
 
 - 根 `README.md`：写作、frontmatter、Markdown 限制、部署说明
@@ -95,6 +106,7 @@
 - 新增 `ssr/004`（三态主题与 on-primary）、`layout/005`（miuix 组件审计与令牌修复）、`markdown/005`（Mermaid 外框）；`ssr/001`、`markdown/004` 标记为部分废弃；更新索引与跨目录关联
 - 新增 `layout/006`（图标系统）与 `markdown/006`（Mermaid 生成主题）；`ssr/004` 的 on-primary 部分标记为部分废弃；`markdown/003`、`markdown/004`、`markdown/005` 补充后续修订；更新索引与跨目录关联
 - 新增 `architecture/003`（Mifumi 身份）、`content/003`（关于页与 `pages` 集合）、`deployment/004`（`/blog/` 前缀冲突与 `/posts` 路由）、`layout/007`（`sun-moon` 与滑块阴影）；更新索引与跨目录关联
+- 新增 `architecture/004`（站点身份修正为 AEBC08）、`layout/008`（miuix 默认主题色）、`content/004`（`GithubRepo` MDC 组件）；`architecture/003` 标记为部分废弃；更新索引与跨目录关联
 
 ## 已验证
 
@@ -162,10 +174,20 @@
   - 系统模式下主题触发按钮与菜单项显示 `sun-moon`（`display: block`），浅色/深色模式分别显示 `sun` / `moon`
   - 交互页滑块 `.m-slider__thumb` 计算样式 `box-shadow: none`
   - 首页、文章列表、文章详情、关于页在明暗两套主题下均正常渲染，无横向溢出
+- AEBC08 身份、miuix 默认主题色与 GithubRepo 验证（`NUXT_APP_BASE_URL=/blog/` 子路径构建 + Node 静态服务器）：
+  - `pnpm lint` 0 error / 0 warning，`pnpm typecheck` 0 error
+  - 浏览器标题为「首页 · AEBC08」「关于 · AEBC08」，顶栏与页脚 Logo 为 `A`
+  - 首页 hero 使用 GitHub 下载的 `avatar.png`，显示 `AEBC08.` 与 `A` 形横幅装饰
+  - 关于页显示 `About` 微标签、AEBC08 个人信息、Mifumi 框架说明、`AEBC08/blog` 仓库卡片与友链空状态
+  - `markdown-showcase` 的 `GitHub 仓库卡片` 章节正确渲染 `nuxt/content` 卡片
+  - 明色 `--app-primary: #3482ff`、`--app-primary-soft: #eaf2ff`、`--app-primary-text: #2569d6`；暗色 `--app-primary: #277af7`、`--app-primary-soft: #2b3b54`、`--app-primary-text: #8ab4ff`
+  - 暗色激活导航与 `.chip` 的计算色为 `rgb(138, 180, 255)` 文字配 `rgb(43, 59, 84)` 背景（5.42:1）；浅色为 `rgb(37, 105, 214)` 配 `rgb(234, 242, 255)`（4.58:1）
+  - `/blog/`、`/blog/about`、`/blog/posts/markdown-showcase` 均 200，无 console error，网络请求无 4xx/5xx
+  - 关于页与仓库卡片的头像、图标、语言圆点、外链箭头均正常渲染
 
 ## 遗留风险与后续
 
-1. 本地已 `git init`，最新提交为 `78176ca`（`main`），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建仓库，部署按用户要求暂停；Mifumi 身份、关于页与 `/posts` 改动仍是未提交状态。
+1. 本地已 `git init`，最新提交为 `7fb52c6`（`main`），但尚未配置 remote、没有推送到 GitHub；工作流未在真实 GitHub Actions 上跑过。首次推送后需确认 Pages source 设为 GitHub Actions、环境与 `baseURL` 正确。用户暂未创建仓库，部署按用户要求暂停；AEBC08 身份修正、主题色与 `GithubRepo` 改动仍是未提交状态。
 2. `miuix-vue` 的 Nitro alias/inline 是版本相关修复，升级后需重新验证预渲染，详见 [ssr/003](../ssr/003-nitro-vue-duplicate.md)。
 3. `pnpm peers check` 报告非致命 peer 警告（`oxc-parser >=0.140.0`、`typescript >=6.0.0`）；TypeScript 有意保持在 5.9.3。
 4. `LinkCard` 按要求包在 `<ClientOnly>` 中，静态 HTML 不包含卡片内容，水合后才出现。
@@ -182,3 +204,7 @@
 15. 关于页的 `content/pages/about.md` 在 Content 中路径是 `/pages/about`，公开路由是 `/about`；新增独立页面需要同时创建 `content/pages/<name>.md` 与 `app/pages/<name>.vue`，详见 [content/003](../content/003-about-page-pages-collection.md)。
 16. 友链当前为空数组，页面显示空状态；添加友链需要在 `appConfig.friends` 中填写 `{ name, href, description, icon? }`，图标名必须是注册表已有名称。
 17. 覆盖 miuix-vue 组件时优先只改 CSS 变量；`sun-moon` 与滑块阴影的教训见 [layout/007](../layout/007-theme-icon-and-slider-audit.md)，不要再给上游组件追加非必要阴影或尺寸。
+18. 头像是从 GitHub 下载的本地副本（`public/covers/avatar.png`），不会自动跟随 GitHub 更新；更换头像后需要重新下载覆盖，详见 [architecture/004](../architecture/004-site-identity-aebc08.md)。
+19. 强调色已拆成填充色 `--app-primary` 与文字色 `--app-primary-text`：文字、图标、链接用后者，按钮/圆点/边框等填充仍用前者。新增强调色文字时不要直接用 `text-app-primary`，否则浅色 `#3482ff` 在 `#eaf2ff` 上只有 3.22:1、暗色 `#277af7` 在 `#2b3b54` 上只有 2.81:1，详见 [layout/008](../layout/008-miuix-default-primary.md)。
+20. `GithubRepo` 的 Star 数与语言是静态 props，不会自动从 GitHub API 更新；需要准确数据时手动修改，或在构建期抓取并保留 props 作为覆盖值，详见 [content/004](../content/004-github-repo-mdc-card.md)。
+21. 顶栏暂未实现「自定义选项弹窗」；当前仍是 `ThemeToggle` 三态菜单 + miuix 默认主题色。若要做运行时调色，应扩展现有 `useTheme`，避免出现两套主题状态。

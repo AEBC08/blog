@@ -8,7 +8,7 @@ const year = new Date().getFullYear()
     <div class="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 text-center sm:px-6">
       <div class="flex items-center gap-2.5">
         <span class="grid size-7 place-items-center rounded-lg bg-app-primary text-xs font-extrabold text-app-on-primary">
-          M
+          A
         </span>
         <p class="text-sm font-medium text-app-text">
           © {{ year }} {{ appConfig.site.author }}

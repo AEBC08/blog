@@ -48,7 +48,7 @@ onBeforeUnmount(() => {
       <div class="app-card rounded-full p-0.5">
         <MiuixIconButton
           aria-label="回到顶部"
-          class="!size-11 !rounded-full text-app-text-variant hover:!text-app-primary"
+          class="!size-11 !rounded-full text-app-text-variant hover:!text-app-primary-text"
           @click="toTop"
         >
           <Icon name="arrow-up" :size="20" />

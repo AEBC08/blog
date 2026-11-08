@@ -53,7 +53,7 @@ useSeoMeta({
         <header class="p-6 sm:p-8">
           <div class="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p class="text-xs font-medium text-app-primary">
+              <p class="text-xs font-medium text-app-primary-text">
                 归档
               </p>
               <h1 class="mt-1 text-3xl font-bold text-app-text sm:text-4xl">
@@ -76,7 +76,7 @@ useSeoMeta({
               to="/posts"
               class="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors"
               :class="!activeCategory
-                ? 'border-app-primary/30 bg-app-primary-soft text-app-primary'
+                ? 'border-app-primary/30 bg-app-primary-soft text-app-primary-text'
                 : 'border-app-divider bg-app-bg-soft text-app-text-variant hover:text-app-text'"
             >
               <Icon name="layout-grid" :size="13" />
@@ -88,7 +88,7 @@ useSeoMeta({
               :to="{ path: '/posts', query: { category: category.name } }"
               class="inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors"
               :class="activeCategory === category.name
-                ? 'border-app-primary/30 bg-app-primary-soft text-app-primary'
+                ? 'border-app-primary/30 bg-app-primary-soft text-app-primary-text'
                 : 'border-app-divider bg-app-bg-soft text-app-text-variant hover:text-app-text'"
             >
               <Icon name="miuix:Folder" :size="13" />
@@ -103,7 +103,7 @@ useSeoMeta({
             <span v-if="normalizedQuery" class="chip">“{{ search }}”</span>
             <button
               type="button"
-              class="inline-flex items-center gap-1 font-medium text-app-primary hover:underline"
+              class="inline-flex items-center gap-1 font-medium text-app-primary-text hover:underline"
               @click="clearFilters"
             >
               <Icon name="x" :size="12" />

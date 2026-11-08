@@ -8,7 +8,8 @@
 
 - [001 Nuxt 4 目录结构与技术栈](architecture/001-nuxt4-directory-and-stack.md)：采用 Nuxt 4 默认 `app/` 源码目录，锁定实际安装版本。
 - [002 当前进度与待办](architecture/002-progress-and-todos.md)：验收结果、已验证项与遗留风险，供后续会话继续。
-- [003 项目定名 Mifumi 与站点身份信息](architecture/003-mifumi-identity.md)：把通用框架文案替换为 AEBC08 的个人博客身份，集中维护 `site` / `profile` / 导航与部署地址。
+- [003 项目定名 Mifumi 与站点身份信息](architecture/003-mifumi-identity.md)：**部分废弃**。把通用框架文案替换为 AEBC08 的个人博客身份；其中「站点标题 = Mifumi」被 004 取代，GitHub 链接、部署地址与导航仍然有效。
+- [004 站点身份修正：站点叫 AEBC08，Mifumi 是框架名](architecture/004-site-identity-aebc08.md)：站点标题与作者改为 AEBC08，Mifumi 仅作为框架名；头像改为 GitHub 下载的本地副本。
 
 ### layout
 
@@ -19,12 +20,14 @@
 - [005 miuix-vue 组件审计、暗色描边根因与缺失令牌](layout/005-miuix-component-audit-and-token-fix.md)：补齐 `--color-app-*` 映射、暗色边框改实色灰；卡片/按钮/搜索栏/开关/滑块改用 miuix-vue；记录 `MiuixCard` 的 wrapper/inner 双层约束。
 - [006 统一图标系统：miuix + Tabler 注册表与 Markdown 内联图标](layout/006-icon-system.md)：新增全局 `Icon.vue` 与精选 Tabler/全部 miuix 图标注册表；正文用 `:icon{name="..."}`，并记录 `remark-mdc` 的前置字符限制。
 - [007 系统主题图标改用 sun-moon，移除滑块多余阴影](layout/007-theme-icon-and-slider-audit.md)：系统模式改用 `sun-moon`；覆盖 miuix-vue 时只保留颜色令牌，删除自加的滑块拇指阴影。
+- [008 主题色回到 miuix 默认，并拆分文字强调色](layout/008-miuix-default-primary.md)：填充色用浅色 `#3482ff` / 暗色 `#277af7`，文字用独立 `--app-primary-text`（`#2569d6` / `#8ab4ff`），让强调色与 miuix-vue 默认值一致且文字可读。
 
 ### content
 
 - [001 Content 集合、schema 与查询封装](content/001-content-schema-and-queries.md)：`blog` 集合、draft 过滤、published 降序、尾斜杠归一化。
 - [002 封面图方案 B](content/002-cover-image-strategy.md)：图片放 `public/`，frontmatter 写绝对路径，统一经 `resolveCoverImage` 加 baseURL。
 - [003 关于页：Markdown + Vue 混合与 pages 集合](content/003-about-page-pages-collection.md)：新增 `pages` 集合，`about.md` 负责正文，Vue 外壳与 `FriendLinks` 负责个人信息和友链区块。
+- [004 GithubRepo：Markdown 里的 GitHub 仓库卡片](content/004-github-repo-mdc-card.md)：新增 `::GithubRepo{repo="owner/name"}` MDC 组件，支持描述、语言、Star 与自定义链接。
 
 ### markdown
 
@@ -73,3 +76,6 @@
 - [architecture/003](architecture/003-mifumi-identity.md) 的身份信息决定 [content/003](content/003-about-page-pages-collection.md) 的关于页内容与友链入口；仓库名 `blog` 又直接导致 [deployment/004](deployment/004-baseurl-blog-route-collision.md) 的 `/blog/` 前缀冲突。
 - [content/003](content/003-about-page-pages-collection.md) 的关于页复用 [content/001](content/001-content-schema-and-queries.md) 的查询方式与 [markdown/002](markdown/002-prose-override-path.md) 的 prose 覆盖；`pages` 集合与 `blog` 集合并列，互不影响文章列表。
 - [layout/007](layout/007-theme-icon-and-slider-audit.md) 修订 [layout/006](layout/006-icon-system.md) 中系统主题使用 `device-desktop` 的选择，并延续 [layout/004](layout/004-flat-design-and-sidebar.md) / [layout/005](layout/005-miuix-component-audit-and-token-fix.md) 的「只覆盖令牌、不叠加多余样式」原则。
+- [architecture/004](architecture/004-site-identity-aebc08.md) 修正 [architecture/003](architecture/003-mifumi-identity.md) 的站点标题决定；站点身份与关于页文案同时影响 [content/003](content/003-about-page-pages-collection.md) 与 [content/004](content/004-github-repo-mdc-card.md)。
+- [layout/008](layout/008-miuix-default-primary.md) 继续 [layout/004](layout/004-flat-design-and-sidebar.md) / [layout/005](layout/005-miuix-component-audit-and-token-fix.md) 的令牌化方案，把 `--app-primary` 对齐 miuix-vue 默认值；[content/004](content/004-github-repo-mdc-card.md) 的语言圆点与链接状态直接读取该强调色。
+- [content/004](content/004-github-repo-mdc-card.md) 的 MDC 注册与组件覆盖机制沿用 [markdown/001](markdown/001-katex-shiki-mermaid-mdc.md) / [markdown/002](markdown/002-prose-override-path.md)，并在 [content/003](content/003-about-page-pages-collection.md) 的关于页中实际使用。

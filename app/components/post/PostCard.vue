@@ -46,7 +46,7 @@ const cover = resolveCoverImage(props.post.image)
           </div>
 
           <h2
-            class="font-bold text-app-text transition-colors group-hover:text-app-primary"
+            class="font-bold text-app-text transition-colors group-hover:text-app-primary-text"
             :class="props.featured ? 'mt-3 text-2xl leading-tight sm:text-3xl' : 'mt-2.5 text-lg leading-snug'"
           >
             {{ props.post.title }}
@@ -66,7 +66,7 @@ const cover = resolveCoverImage(props.post.image)
                 #{{ tag }}
               </span>
             </div>
-            <span class="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-app-primary-soft text-app-primary transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">
+            <span class="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-app-primary-soft text-app-primary-text transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden="true">
               <Icon name="arrow-right" :size="16" />
             </span>
           </div>

@@ -40,7 +40,7 @@ useSeoMeta({
                   个人博客
                 </p>
                 <h1 class="mt-1 text-3xl font-extrabold leading-none text-white sm:text-5xl">
-                  {{ appConfig.profile.name }}<span class="text-app-primary">.</span>
+                  {{ appConfig.profile.name }}<span class="text-app-primary-text">.</span>
                 </h1>
               </div>
             </div>
@@ -106,7 +106,7 @@ useSeoMeta({
       <section>
         <div class="mb-4 flex items-end justify-between gap-4">
           <div>
-            <p class="text-xs font-medium text-app-primary">
+            <p class="text-xs font-medium text-app-primary-text">
               最新
             </p>
             <h2 class="mt-1 text-2xl font-bold text-app-text">
@@ -115,7 +115,7 @@ useSeoMeta({
           </div>
           <NuxtLink
             to="/posts"
-            class="group inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-card px-4 py-2 text-sm font-semibold text-app-text-variant shadow-sm transition-colors hover:border-app-primary/40 hover:text-app-primary"
+            class="group inline-flex items-center gap-1.5 rounded-full border border-app-divider bg-app-card px-4 py-2 text-sm font-semibold text-app-text-variant shadow-sm transition-colors hover:border-app-primary/40 hover:text-app-primary-text"
           >
             全部文章
             <Icon name="arrow-right" class="transition-transform group-hover:translate-x-0.5" :size="16" />
@@ -130,14 +130,14 @@ useSeoMeta({
         <section class="p-5 sm:p-6">
           <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p class="text-xs font-medium text-app-primary">
+              <p class="text-xs font-medium text-app-primary-text">
                 分类
               </p>
               <h2 class="mt-1 text-lg font-bold text-app-text">
                 按分类浏览
               </h2>
             </div>
-            <NuxtLink to="/posts" class="text-sm font-medium text-app-primary hover:underline">
+            <NuxtLink to="/posts" class="text-sm font-medium text-app-primary-text hover:underline">
               查看全部
             </NuxtLink>
           </div>
@@ -147,11 +147,11 @@ useSeoMeta({
               v-for="category in categories"
               :key="category.name"
               :to="{ path: '/posts', query: { category: category.name } }"
-              class="inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-bg-soft px-3.5 py-2 text-sm font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary"
+              class="inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-bg-soft px-3.5 py-2 text-sm font-medium text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary-text"
             >
               <Icon name="miuix:Folder" :size="14" />
               {{ category.name }}
-              <span class="rounded-full bg-app-primary-soft px-1.5 py-0.5 text-[10px] font-bold text-app-primary">{{ category.count }}</span>
+              <span class="rounded-full bg-app-primary-soft px-1.5 py-0.5 text-[10px] font-bold text-app-primary-text">{{ category.count }}</span>
             </NuxtLink>
           </div>
         </section>

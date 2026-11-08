@@ -55,11 +55,11 @@ const initial = computed(() => props.icon ?? props.title.slice(0, 1).toUpperCase
         <template v-else>{{ initial }}</template>
       </span>
       <span class="min-w-0 flex-1">
-        <span class="block truncate text-sm font-semibold text-app-text transition-colors group-hover:text-app-primary">{{ props.title }}</span>
+        <span class="block truncate text-sm font-semibold text-app-text transition-colors group-hover:text-app-primary-text">{{ props.title }}</span>
         <span v-if="props.description" class="mt-0.5 block truncate text-xs text-app-text-variant">{{ props.description }}</span>
         <span class="mt-1 block truncate text-[11px] text-app-text-faint">{{ hostname }}</span>
       </span>
-      <Icon name="arrow-up-right" class="shrink-0 text-app-text-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-app-primary" :size="16" />
+      <Icon name="arrow-up-right" class="shrink-0 text-app-text-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-app-primary-text" :size="16" />
     </a>
   </ClientOnly>
 </template>

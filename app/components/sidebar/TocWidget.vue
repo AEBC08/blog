@@ -46,7 +46,7 @@ onBeforeUnmount(() => {
   <MiuixCard v-if="links.length">
     <div class="p-5">
       <h2 class="widget-title flex items-center gap-2 text-sm font-bold text-app-text">
-        <Icon name="miuix:ListView" class="text-app-primary" :size="16" />
+        <Icon name="miuix:ListView" class="text-app-primary-text" :size="16" />
         目录
       </h2>
 
@@ -57,7 +57,7 @@ onBeforeUnmount(() => {
           :href="`#${link.id}`"
           class="group flex items-start gap-2 rounded-lg py-1.5 pr-2 text-sm leading-5 transition-colors"
           :class="activeId === link.id
-            ? 'font-semibold text-app-primary'
+            ? 'font-semibold text-app-primary-text'
             : 'text-app-text-variant hover:text-app-text'"
           :style="{ paddingLeft: `${Math.max(link.depth - 2, 0) * 0.75 + 0.5}rem` }"
         >

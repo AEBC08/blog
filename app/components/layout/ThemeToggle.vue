@@ -56,7 +56,7 @@ onBeforeUnmount(() => {
       aria-label="选择主题"
       aria-haspopup="menu"
       :aria-expanded="open"
-      class="!size-9 !rounded-full text-app-text-variant transition-colors hover:!bg-app-primary-soft hover:!text-app-primary"
+      class="!size-9 !rounded-full text-app-text-variant transition-colors hover:!bg-app-primary-soft hover:!text-app-primary-text"
       @click="open = !open"
     >
       <!-- The trigger icon follows html[data-theme-mode], so it is correct
@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
           :aria-checked="mode === option.value"
           class="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-left text-[13px] font-medium transition-colors"
           :class="mode === option.value
-            ? 'bg-app-primary-soft text-app-primary'
+            ? 'bg-app-primary-soft text-app-primary-text'
             : 'text-app-text-variant hover:bg-app-bg-soft hover:text-app-text'"
           @click="choose(option.value)"
         >

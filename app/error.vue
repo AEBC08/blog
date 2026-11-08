@@ -39,7 +39,7 @@ function goHome(): void {
       <MiuixCard class="relative w-full max-w-lg">
         <div class="p-8 text-center sm:p-10">
           <div class="relative">
-            <p class="text-6xl font-extrabold leading-none text-app-primary sm:text-7xl">
+            <p class="text-6xl font-extrabold leading-none text-app-primary-text sm:text-7xl">
               {{ statusCode }}
             </p>
             <h1 class="mt-4 text-2xl font-bold text-app-text">
@@ -55,7 +55,7 @@ function goHome(): void {
               </MiuixButton>
               <NuxtLink
                 to="/posts"
-                class="inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-bg-soft px-5 py-2.5 text-sm font-semibold text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary"
+                class="inline-flex items-center gap-2 rounded-full border border-app-divider bg-app-bg-soft px-5 py-2.5 text-sm font-semibold text-app-text-variant transition-colors hover:border-app-primary/40 hover:text-app-primary-text"
               >
                 浏览文章
               </NuxtLink>
