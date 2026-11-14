@@ -35,3 +35,11 @@
 - 直链对会员曲目可能返回 404，歌单里若加入 VIP 歌，会在运行时报一次跳过。
 - 元数据是构建期快照：歌单改名或增删歌曲，要等下一次部署才更新。
 - 新增 8 个 Tabler 图标到 `icon-registry.ts`（player-play / player-pause / player-skip-back / player-skip-forward / repeat / repeat-once / arrows-shuffle / playlist），遵守 [006](006-icon-system.md) 的注册表规则。
+
+## 线上验证（2026-11-15）
+
+- `pnpm lint` / `pnpm typecheck` 零错误；GitHub Actions 构建 run 通过并部署成功。
+- 线上首页 HTML 里能看到 `MyBlogMusic` 的 8 首曲目（Loow / Air / Silent Light …），说明构建期接口抓取在 CI 里正常。
+- 首屏 `<audio src="https://music.163.com/song/media/outer/url?id=424985022.mp3">`，`preload="none"`，点播放才请求音频。
+- 侧边栏 DOM 顺序：Profile → 音乐 → 分类 → 标签；进度条为 `bg-app-text`（浅色近黑、暗色近白），轨道 `bg-app-text/15`。
+- 本机沙箱里 `nuxt build` 被 safe-delete 垫片拦在 `writeManifest`（trash 超时），属于环境限制，不是代码问题；实际校验以 CI 为准。
