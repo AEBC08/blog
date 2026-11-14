@@ -29,6 +29,24 @@
   --app-on-primary: #ffffff;
   --app-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -18px rgb(15 23 42 / 0.18);
   --app-shadow-hover: 0 2px 4px rgb(15 23 42 / 0.05), 0 16px 36px -22px rgb(15 23 42 / 0.24);
+
+  /* Home hero owns a private palette: `hero.appearance` can force a light or
+   * dark surface without changing the rest of the page. */
+  --hero-surface: #ffffff;
+  --hero-surface-2: #f5f7fb;
+  --hero-grid: #eef1f6;
+  --hero-monogram: #dde3ec;
+  --hero-brand: #97a0ae;
+  --hero-text: #171a20;
+  --hero-text-soft: #565d6b;
+  --hero-text-faint: #8b919c;
+  --hero-line: rgb(15 23 42 / 0.12);
+  --hero-ghost: rgb(15 23 42 / 0.04);
+  --hero-ghost-hover: rgb(15 23 42 / 0.08);
+  --hero-accent: #3482ff;
+  --hero-accent-text: #2569d6;
+  --hero-on-accent: #ffffff;
+  --hero-glow: rgb(52 130 255 / 0.07);
 }
 
 .dark {
@@ -53,6 +71,22 @@
   --app-on-primary: #ffffff;
   --app-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 10px 28px -20px rgb(0 0 0 / 0.8);
   --app-shadow-hover: 0 2px 6px rgb(0 0 0 / 0.4), 0 18px 40px -24px rgb(0 0 0 / 0.85);
+
+  --hero-surface: #111418;
+  --hero-surface-2: #151a20;
+  --hero-grid: #1d222a;
+  --hero-monogram: #2a303a;
+  --hero-brand: #8b919c;
+  --hero-text: #f2f3f5;
+  --hero-text-soft: rgb(255 255 255 / 0.7);
+  --hero-text-faint: rgb(255 255 255 / 0.55);
+  --hero-line: rgb(255 255 255 / 0.15);
+  --hero-ghost: rgb(255 255 255 / 0.05);
+  --hero-ghost-hover: rgb(255 255 255 / 0.1);
+  --hero-accent: #277af7;
+  --hero-accent-text: #8ab4ff;
+  --hero-on-accent: #ffffff;
+  --hero-glow: rgb(52 130 255 / 0.14);
 }
 
 /* miuix-vue reads these tokens. main.css is loaded after its stylesheet so
@@ -167,6 +201,15 @@
   --color-app-primary-soft: var(--app-primary-soft);
   --color-app-primary-container: var(--app-primary-soft);
   --color-app-on-primary-container: var(--app-primary-text);
+  --color-hero-text: var(--hero-text);
+  --color-hero-text-soft: var(--hero-text-soft);
+  --color-hero-text-faint: var(--hero-text-faint);
+  --color-hero-line: var(--hero-line);
+  --color-hero-ghost: var(--hero-ghost);
+  --color-hero-ghost-hover: var(--hero-ghost-hover);
+  --color-hero-accent: var(--hero-accent);
+  --color-hero-accent-text: var(--hero-accent-text);
+  --color-hero-on-accent: var(--hero-on-accent);
   --radius-app: 1rem;
   --font-sans: 'MiSans', 'HarmonyOS Sans SC', 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Maple Mono', 'MiSans', 'HarmonyOS Sans SC', 'Noto Sans SC', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -254,6 +297,13 @@
  * bar needs the inner card to stop clipping its overflow. */
 .topbar-card .m-card {
   overflow: visible;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Docked state: once the page scrolls, deepen the top bar shadow so the
+ * floating pill reads as a layer above the content. */
+.topbar-scrolled .m-card {
+  box-shadow: var(--app-shadow-hover);
 }
 
 .chip {
@@ -373,6 +423,248 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
 }
 
 /* ---------------------------------------------------------------------------
+ * Home hero
+ * All hero colours are CSS variables, so the inline head theme script decides
+ * the surface before first paint. `appearance: light | dark` re-declares the
+ * opposite palette on the hero root, which also wins inside a global theme.
+ * ------------------------------------------------------------------------- */
+
+.hero {
+  --hero-bg-light-opacity: 1;
+  --hero-bg-dark-opacity: 0;
+  --hero-px: 0px;
+  --hero-py: 0px;
+}
+
+.dark .hero-appearance-auto {
+  --hero-bg-light-opacity: 0;
+  --hero-bg-dark-opacity: 1;
+}
+
+:root .hero-surface-dark {
+  --hero-bg-light-opacity: 0;
+  --hero-bg-dark-opacity: 1;
+  --hero-surface: #111418;
+  --hero-surface-2: #151a20;
+  --hero-grid: #1d222a;
+  --hero-monogram: #2a303a;
+  --hero-brand: #8b919c;
+  --hero-text: #f2f3f5;
+  --hero-text-soft: rgb(255 255 255 / 0.7);
+  --hero-text-faint: rgb(255 255 255 / 0.55);
+  --hero-line: rgb(255 255 255 / 0.15);
+  --hero-ghost: rgb(255 255 255 / 0.05);
+  --hero-ghost-hover: rgb(255 255 255 / 0.1);
+  --hero-accent: #277af7;
+  --hero-accent-text: #8ab4ff;
+  --hero-on-accent: #ffffff;
+  --hero-glow: rgb(52 130 255 / 0.14);
+}
+
+.dark .hero-surface-light {
+  --hero-bg-light-opacity: 1;
+  --hero-bg-dark-opacity: 0;
+  --hero-surface: #ffffff;
+  --hero-surface-2: #f5f7fb;
+  --hero-grid: #eef1f6;
+  --hero-monogram: #dde3ec;
+  --hero-brand: #97a0ae;
+  --hero-text: #171a20;
+  --hero-text-soft: #565d6b;
+  --hero-text-faint: #8b919c;
+  --hero-line: rgb(15 23 42 / 0.12);
+  --hero-ghost: rgb(15 23 42 / 0.04);
+  --hero-ghost-hover: rgb(15 23 42 / 0.08);
+  --hero-accent: #3482ff;
+  --hero-accent-text: #2569d6;
+  --hero-on-accent: #ffffff;
+  --hero-glow: rgb(52 130 255 / 0.07);
+}
+
+.hero-parallax {
+  pointer-events: none;
+  transform: translate3d(var(--hero-px), var(--hero-py), 0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-bg-stage {
+  overflow: hidden;
+}
+
+.hero-bg-img {
+  transition: opacity 0.3s ease;
+}
+
+.hero-bg-img--light {
+  opacity: var(--hero-bg-light-opacity);
+}
+
+.hero-bg-img--dark {
+  opacity: var(--hero-bg-dark-opacity);
+}
+
+.hero-surface {
+  background: linear-gradient(135deg, var(--hero-surface) 0%, var(--hero-surface-2) 100%);
+}
+
+.hero-glow {
+  background: radial-gradient(circle at 78% 35%, var(--hero-glow), transparent 62%);
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(to right, var(--hero-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid) 1px, transparent 1px);
+  background-size: 12.5% 16.6667%;
+  opacity: 0.7;
+}
+
+.hero-monogram path {
+  fill: none;
+  stroke: var(--hero-monogram);
+  stroke-width: 22;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.hero-brand {
+  top: 13.3%;
+  left: 6%;
+  color: var(--hero-brand);
+}
+
+.hero-brand-mark {
+  width: 56px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--hero-accent);
+}
+
+.hero-brand-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+
+.hero-accent-line {
+  stroke: var(--hero-grid);
+  stroke-width: 2;
+}
+
+.hero-accent-line-fill {
+  stroke: var(--hero-accent);
+  stroke-width: 2;
+  stroke-dasharray: 96;
+  stroke-dashoffset: 96;
+}
+
+/* ---------------------------------------------------------------------------
+ * Hero motion
+ * Entrance timing comes from `--hero-*` custom properties set by the component,
+ * which are in turn derived from `hero.motion` in app.config.ts.
+ * ------------------------------------------------------------------------- */
+
+@keyframes hero-bg-in {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-bg-animated {
+  animation: hero-bg-in calc(var(--hero-duration) * 2.2) cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--hero-distance), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-enter-playful {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translate3d(0, var(--hero-distance), 0) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+.hero-enter {
+  animation: hero-enter var(--hero-duration) cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--hero-delay) + var(--hero-i, 0) * var(--hero-stagger));
+}
+
+.hero-preset-playful .hero-enter {
+  animation-name: hero-enter-playful;
+}
+
+@keyframes hero-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hero-draw path:first-child {
+  stroke-dasharray: 680;
+  stroke-dashoffset: 680;
+  animation: hero-draw 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+.hero-draw path:last-child {
+  stroke-dasharray: 190;
+  stroke-dashoffset: 190;
+  animation: hero-draw 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
+}
+
+@keyframes hero-line-grow {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hero-accent-grow .hero-accent-line-fill {
+  animation: hero-line-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both;
+}
+
+@keyframes hero-float {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(0, -20px, 0) scale(1.08);
+  }
+}
+
+.hero-float {
+  animation: hero-float 9s ease-in-out infinite alternate;
+}
+
+.hero-motion-off *,
+.hero-motion-off *::before,
+.hero-motion-off *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* ---------------------------------------------------------------------------
  * Motion
  * ------------------------------------------------------------------------- */
 
@@ -392,6 +684,112 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
   animation: app-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ---------------------------------------------------------------------------
+ * Page transition & scroll reveal
+ * ------------------------------------------------------------------------- */
+
+/* Nuxt pageTransition (nuxt.config reads site.config.effects.pageTransition). */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity 0.22s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page-leave-active {
+  /* Shorter exit keeps navigation feeling snappy. */
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* v-reveal (app/plugins/reveal.ts). Hidden state is JS-applied only. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Text selection in brand tint instead of the browser default. */
+::selection {
+  color: var(--app-text);
+  background: var(--app-primary-soft);
+}
+
+.dark ::selection {
+  color: var(--app-text);
+  background: rgb(39 122 247 / 0.35);
+}
+
+/* Skeleton placeholder (GithubRepo card while the payload chunk loads). */
+.skeleton {
+  background: var(--app-bg-soft);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Image fade-in (v-img-fade). Hidden state is JS-applied only, so SSR and
+ * no-JS environments always render the image immediately. */
+img.img-fade {
+  transition: opacity 0.4s ease;
+}
+
+img.img-fade.img-fade-hidden {
+  opacity: 0;
+}
+
+/* Theme-aware slim scrollbar (WebKit); Firefox follows color-scheme. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: var(--app-border-strong);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--app-text-faint);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -401,8 +799,45 @@ html:not([data-theme-mode]) .theme-mode-icon--system {
     animation: none;
   }
 
+  .page-enter-active,
+  .page-leave-active {
+    transition: none;
+  }
+
+  .page-enter-from,
+  .page-leave-to {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .skeleton {
+    animation: none;
+    opacity: 0.7;
+  }
+
+  img.img-fade {
+    transition: none;
+  }
+
   .app-card-hover:hover {
     transform: none;
+  }
+
+  .hero *,
+  .hero *::before,
+  .hero *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hero-parallax {
+    transform: none !important;
   }
 }
 

@@ -108,6 +108,8 @@ useSeoMeta({
         </article>
       </MiuixCard>
 
+      <CommentSection v-if="page.layout !== 'interactive'" />
+
       <nav v-if="newerPost || olderPost" class="grid gap-3 sm:grid-cols-2" aria-label="文章导航">
         <NuxtLink
           v-if="newerPost"

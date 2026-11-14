@@ -1,6 +1,7 @@
 import { createRequire } from 'node:module'
 import process from 'node:process'
 import tailwindcss from '@tailwindcss/vite'
+import { siteConfig } from './site.config'
 
 const require = createRequire(import.meta.url)
 // Nitro's prerenderer bundles Vue's CJS build. Point every `vue` import at the
@@ -250,16 +251,21 @@ export default defineNuxtConfig({
   },
 
   app: {
+    // Route-level fade/slide transition; toggled from site.config.effects so
+    // the build decides whether the transition classes ship at all.
+    pageTransition: siteConfig.effects.pageTransition
+      ? { name: 'page', mode: 'out-in' }
+      : false,
     // Project sites live under https://<user>.github.io/<repository>/
     baseURL: process.env.NUXT_APP_BASE_URL || '/',
     // GitHub Pages ignores files starting with "_" (default: _nuxt)
     buildAssetsDir: 'nuxt_assets',
     head: {
-      htmlAttrs: { lang: 'zh-CN' },
-      title: 'AEBC08',
+      htmlAttrs: { lang: siteConfig.site.lang },
+      title: siteConfig.site.title,
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'AEBC08 的个人博客，记录开发、工具与日常折腾。' },
+        { name: 'description', content: siteConfig.site.description },
         { name: 'theme-color', content: '#f2f3f5', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#121212', media: '(prefers-color-scheme: dark)' },
       ],

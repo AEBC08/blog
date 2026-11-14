@@ -11,6 +11,7 @@
 - [003 项目定名 Mifumi 与站点身份信息](architecture/003-mifumi-identity.md)：**部分废弃**。把通用框架文案替换为 AEBC08 的个人博客身份；其中「站点标题 = Mifumi」被 004 取代，GitHub 链接、部署地址与导航仍然有效。
 - [004 站点身份修正：站点叫 AEBC08，Mifumi 是框架名](architecture/004-site-identity-aebc08.md)：站点标题与作者改为 AEBC08，Mifumi 仅作为框架名；头像改为 GitHub 下载的本地副本。
 - [005 标签页图标改用头像，头像文件改名 jpg](architecture/005-favicon-and-avatar-file.md)：favicon 与 `apple-touch-icon` 复用 `covers/avatar.jpg`，删除字母 SVG，记录头像实为 JPEG 的扩展名问题。
+- [006 站点配置独立为 site.config.ts](architecture/006-site-config-single-source.md)：站点名称、页脚、导航、横幅收敛到根目录单一数据源，`nuxt.config.ts` 与 `useAppConfig()` 共同读取。
 
 ### layout
 
@@ -23,6 +24,9 @@
 - [007 系统主题图标改用 sun-moon，移除滑块多余阴影](layout/007-theme-icon-and-slider-audit.md)：系统模式改用 `sun-moon`；覆盖 miuix-vue 时只保留颜色令牌，删除自加的滑块拇指阴影。
 - [008 主题色回到 miuix 默认，并拆分文字强调色](layout/008-miuix-default-primary.md)：填充色用浅色 `#3482ff` / 暗色 `#277af7`，文字用独立 `--app-primary-text`（`#2569d6` / `#8ab4ff`），让强调色与 miuix-vue 默认值一致且文字可读。
 - [009 顶栏/页脚改用 GitHub 头像，页脚改为超链接与技术栈文本](layout/009-topbar-footer-avatar-and-footer-links.md)：**已实现**。两处字母 Logo 换成 `avatar.jpg`，页脚技术栈与版权改超链接，并追加 CC BY-NC-SA 4.0 声明。
+- [010 首页横幅：明暗双版本、组件化与可配置动效](layout/010-hero-theme-and-motion-config.md)：白色版横幅、`--hero-*` 令牌、`HeroBanner.vue`、分段入场与视差/数字滚动，全部由 `site.config.ts` 配置。
+- [011 全局视觉动效：页面过渡、滚动进度条与内容渐显](layout/011-page-transition-progress-reveal.md)：`pageTransition` out-in 过渡、顶部 `scaleX` 阅读进度条、`v-reveal` IntersectionObserver 渐显、顶栏贴附阴影与滚动条/选区打磨，开关集中在 `effects` 分组。
+- [012 目录高亮、骨架屏、图片淡入、评论系统与友链页](layout/012-toc-skeleton-image-giscus-friends.md)：目录滚动位置算法（含 scrollIntoView 回弹教训）、GithubRepo 骨架屏、`ProseImg`/`v-img-fade` 图片懒加载淡入、giscus 评论区（参数未填全不渲染）、`/friends` 友链页。
 
 ### content
 
@@ -97,3 +101,4 @@
 - [content/009](content/009-friends-via-linkcard.md) 取代 [content/003](content/003-about-page-pages-collection.md) 里的 `FriendLinks` 区块，复用 [content/006](content/006-linkcard-icon-background.md) 的图标样式；关于页仍是 Markdown + Vue 混合。
 - [deployment/005](deployment/005-git-bash-base-url.md) 是 [deployment/004](deployment/004-baseurl-blog-route-collision.md) 的构建侧补充：同一个 `/blog/` 前缀在 PowerShell 与 Git Bash 下的两种行为。
 - [content/010](content/010-code-mit-content-cc.md) 修订 [content/007](content/007-site-license-cc-by-nc-sa.md) 的许可范围：CC 声明保留给内容，仓库本身改为 MIT，`GithubRepo` 卡片读到的 `license` 也随之变成 MIT。
+- [architecture/006](architecture/006-site-config-single-source.md) 是 [layout/010](layout/010-hero-theme-and-motion-config.md) 的配置入口：`hero` 与页脚、站点名共用同一份 `siteConfig`；[layout/010](layout/010-hero-theme-and-motion-config.md) 的明暗切换沿用 [ssr/001](ssr/001-theme-fouc-and-mermaid.md) 的 class 驱动机制，配色则沿用 [layout/004](layout/004-flat-design-and-sidebar.md) / [layout/008](layout/008-miuix-default-primary.md) 的令牌化方案。

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 720" role="img" aria-label="AEBC08 banner light">
+  <defs>
+    <linearGradient id="light-surface" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f5f7fb"/>
+    </linearGradient>
+    <radialGradient id="light-glow" cx="0.78" cy="0.35" r="0.55">
+      <stop offset="0" stop-color="#3482ff" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#3482ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="720" fill="url(#light-surface)"/>
+  <rect width="1600" height="720" fill="url(#light-glow)"/>
+
+  <g stroke="#e6eaf1" stroke-width="1">
+    <path d="M0 120H1600M0 240H1600M0 360H1600M0 480H1600M0 600H1600"/>
+    <path d="M200 0V720M400 0V720M600 0V720M800 0V720M1000 0V720M1200 0V720M1400 0V720"/>
+  </g>
+
+  <!-- 品牌标记与站点名由 HeroBanner 按 site.config.ts 渲染，避免写死在图片里。 -->
+
+  <g fill="none" stroke="#d8dfea" stroke-width="22" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M1020 540L1170 220L1320 540"/>
+    <path d="M1080 430H1260"/>
+  </g>
+
+  <rect x="1020" y="580" width="300" height="2" fill="#e6eaf1"/>
+  <rect x="1020" y="580" width="96" height="2" fill="#3482ff"/>
+</svg>

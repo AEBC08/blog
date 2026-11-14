@@ -26,11 +26,13 @@ const cover = resolveCoverImage(props.post.image)
             : 'aspect-[16/9] w-full sm:aspect-auto sm:w-56 lg:w-60'"
         >
           <img
+            v-img-fade
             :src="cover"
             :alt="props.post.title"
             class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
             :class="props.featured ? '' : 'sm:object-left'"
-            loading="lazy"
+            :loading="props.featured ? 'eager' : 'lazy'"
+            decoding="async"
           >
         </div>
 

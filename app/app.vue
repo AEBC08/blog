@@ -13,7 +13,7 @@ const iconLinks = avatar
 
 useHead({
   titleTemplate: title => title
-    ? `${title} · ${appConfig.site.title}`
+    ? `${title}${appConfig.site.titleSeparator}${appConfig.site.title}`
     : appConfig.site.title,
   link: iconLinks,
 })
