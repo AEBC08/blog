@@ -27,6 +27,7 @@
 - [010 首页横幅：明暗双版本、组件化与可配置动效](layout/010-hero-theme-and-motion-config.md)：白色版横幅、`--hero-*` 令牌、`HeroBanner.vue`、分段入场与视差/数字滚动，全部由 `site.config.ts` 配置。
 - [011 全局视觉动效：页面过渡、滚动进度条与内容渐显](layout/011-page-transition-progress-reveal.md)：`pageTransition` out-in 过渡、顶部 `scaleX` 阅读进度条、`v-reveal` IntersectionObserver 渐显、顶栏贴附阴影与滚动条/选区打磨，开关集中在 `effects` 分组。
 - [012 目录高亮、骨架屏、图片淡入、评论系统与友链页](layout/012-toc-skeleton-image-giscus-friends.md)：目录滚动位置算法（含 scrollIntoView 回弹教训）、GithubRepo 骨架屏、`ProseImg`/`v-img-fade` 图片懒加载淡入、giscus 评论区（参数未填全不渲染）、`/friends` 友链页。
+- [013 侧边栏音乐播放器：构建期取歌单，运行时官方直链](layout/013-sidebar-music-widget.md)：歌单数据预渲染进 payload，音频走 `song/media/outer/url`；自绘可拖动进度条、三态循环与可展开列表，配色跟随 `--app-text`。
 
 ### content
 

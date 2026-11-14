@@ -20,9 +20,12 @@ const { categories, tags } = await useSidebarData()
     <TocWidget />
   </div>
   <div v-reveal="{ delay: 100 }">
-    <CategoriesWidget :terms="categories" :active="activeCategory" />
+    <MusicWidget />
   </div>
   <div v-reveal="{ delay: 150 }">
+    <CategoriesWidget :terms="categories" :active="activeCategory" />
+  </div>
+  <div v-reveal="{ delay: 200 }">
     <TagsWidget :terms="tags" :active="activeTag" />
   </div>
 </template>

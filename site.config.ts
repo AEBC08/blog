@@ -55,6 +55,17 @@ export const siteConfig = {
     ],
   },
 
+  /**
+   * 侧边栏音乐播放器：只存歌单 ID，曲目在构建期用网易云官方接口取，
+   * 见 app/components/sidebar/MusicWidget.vue 与 memory/layout/013。
+   */
+  music: {
+    /** 关掉后侧边栏不再渲染这块卡片。 */
+    enabled: true,
+    /** 网易云歌单 ID（分享链接里 id 后面的那串数字）。 */
+    playlistId: '18597875286',
+  },
+
   /** 顶部导航，顺序即显示顺序。 */
   navigation: [
     { label: '首页', to: '/' },
