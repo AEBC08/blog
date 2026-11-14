@@ -13,7 +13,7 @@ layout: default
 lang: zh-CN
 ---
 
-opencode 的好处是模型可换。坏处是换完以后账单也跟着换。这周把它的后端挪到了 [Kouri Ai](https://api.kourichat.com)——一个类似 OpenRouter 的中转，主力模型用 `deepseek-v4.1-flash-1017`。配置不复杂，但有几个参数文档里散着写，凑一起才好用。
+opencode 的好处是模型可换。坏处是换完以后账单也跟着换。最近把它的后端挪到了 [Kouri Ai](https://api.kourichat.com)——一个类似 OpenRouter 的中转，主力模型用 `deepseek-v4.1-flash-1017`。配置不复杂，但有几个参数文档里散着写，凑一起才好用。
 
 ## 平台本身
 
@@ -134,7 +134,7 @@ Responses 端点别急着用。文档明确列了一批 DeepSeek 型号不支持
 
 ## 我现在的用法
 
-日常写代码、读代码、整理笔记都留在 `high`，一个月下来成本比直连官方低不少；遇到疑难 bug 临时 `#max`，解决完切回来。这算不上什么最佳实践，只是把「贵」和「慢」分开放：平时用便宜的模式跑量，关键时刻再花钱买思考时间。
+日常写代码、读代码、整理笔记都留在 `high`，几次大会话跑下来，成本比直连官方低不少；遇到疑难 bug 临时 `#max`，解决完切回来。这算不上什么最佳实践，只是把「贵」和「慢」分开放：平时用便宜的模式跑量，关键时刻再花钱买思考时间。
 
 ::LinkCard{title="Kouri Ai 控制台" description="注册、建令牌、查模型列表与用量。" href="https://api.kourichat.com/dashboard" icon="brand-openai" icon-bg="var(--app-primary)" icon-color="#ffffff"}
 ::
