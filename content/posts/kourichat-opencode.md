@@ -1,7 +1,7 @@
 ---
-title: 把 opencode 接到 Kouri Ai，主力换成 DeepSeek V4.1 Flash
+title: opencode 接 Kouri Ai，顺手记下 DeepSeek V4.1 Flash 的几个参数
 published: 2026-11-14T12:35:00.000Z
-description: 一个中转平台加一份 opencode 配置，顺带说说多模态、思考等级和 1M 上下文实际怎么用。
+description: 换掉 opencode 的后端，配置贴在这里，以后重装不用再翻文档。
 tags:
   - AI
   - opencode
@@ -13,25 +13,25 @@ layout: default
 lang: zh-CN
 ---
 
-opencode 的好处是模型可换。坏处是换完以后账单也跟着换。最近把它的后端挪到了 [Kouri Ai](https://api.kourichat.com)——一个类似 OpenRouter 的中转，主力模型用 `deepseek-v4.1-flash-1017`。配置不复杂，但有几个参数文档里散着写，凑一起才好用。
+直连的钱包压力有点大，加上这边访问时不时抽风，就把 opencode 的后端换成了 [Kouri Ai](https://api.kourichat.com)。用了几天，配置记在下面，省得下次重装再翻一遍文档。
 
-## 平台本身
+它是那种中转站，跟 OpenRouter 一个思路。注册、建令牌、从控制台抄模型 ID、把 baseURL 指过去，就完事。除了 OpenAI 的 `/v1/chat/completions`，Anthropic 的 `/v1/messages` 和 Gemini 的 `/v1beta/models` 也开着，图片、embedding、rerank 各有端点，换模型不用换客户端。
 
-一句话：注册、建令牌、从模型列表里抄 ID、把 Base URL 指向 `https://api.kourichat.com/v1`，就能用 OpenAI 协议的客户端调几乎所有主流模型。它同时开着 `/v1/responses`、`/v1/messages`（Anthropic 协议）和 `/v1beta/models`（Gemini 协议），图像、嵌入、重排也各有端点，所以基本不用为了换模型去改客户端。
+价格页面我看了两遍。它说自己暂时没有长文本溢价、多模态溢价，也没有峰谷价，标多少就收多少。真正让我决定用的是另一行：DeepSeek V4 之后的型号，缓存读取按输入价的 2% 算，写入免费。agent 跑起来上下文一轮轮往上堆，省的就是这部分。
 
-吸引我的其实是计价方式。官方文档写得很直白：暂时没有长文本输入溢价、多模态输入溢价、峰谷价，看到的价格就是结算价格。对动辄塞几万 token 上下文的 agent 来说，这条比「每百万 token 便宜两毛」实在。DeepSeek V4 及更新的型号，缓存读取按输入价的 2% 计费，缓存写入免费，长会话的成本能压下去一截。
+该有的担心也有。它不是官方，出问题只能等客服。控制台固定走 `api.kourichat.com/dashboard`，调用可以换成备用域名 `api.kouri.chat`，主域名连不上的时候能救一下。模型 ID 一定从控制台复制，文档里也写了，调列表里没有的 ID 有时能通，但计费不保证。
 
-有两个细节值得先记住。控制台只能走 <https://api.kourichat.com/dashboard>，但调用可以走备用域名 `https://api.kouri.chat/v1`，某些网络环境下主域名连不上时能救急。另外模型 ID 一律以控制台「模型」页为准，照着抄；文档里也承认，调一个列表里没有的 ID 有时也能通，但计费准确性不保证。
+## 为什么挑 V4.1 Flash
 
-## 为什么是 V4.1 Flash
+便宜，上下文大，能看图。就这三条。
 
-`deepseek-v4.1-flash-1017` 是 V4.1-Flash 的 10 月 17 日迭代版，552B 总参数的 MoE，但输入阶段只激活 8B、输出激活 16B，属于非对称的 encoder-decoder 结构。落到实际使用上是三个数字：100 万 token 上下文、384K 最大输出、最大思维链也是 384K。
+`deepseek-v4.1-flash-1017` 是 V4.1-Flash 十月十七号的迭代版，552B 的 MoE，输入阶段只激活 8B，输出激活 16B，所以价格压得住。上下文 1M，最大输出 384K，思维链也算在 384K 里。思考默认开着，默认档位 high。
 
-原生支持图片输入，输出只有文本。思考模式默认开启，默认档位是 `high`。写代码这件事上，它的定位很清楚：不是最聪明的那个，但便宜、够快、能一口气吃下整个仓库的目录结构和几个关键文件，适合当日常 agent 的底座。真卡住了再切 pro 或者把思考档位拉到 `max`，比一开始就用贵模型划算。
+它不是最聪明的那个模型，长任务偶尔会绕。但日常改代码、读代码这类活够用，一个仓库的目录加几个关键文件扔进去也不太肉疼。真卡住了我才会切到 pro，或者把档位拉到 max。
 
-## 配进 opencode
+## 装进 opencode
 
-opencode 现在的配置里，自定义 provider 是 `providers`（复数）这一段，模型挂在下面。`deepseek-v4.1-flash-1017` 不在任何内置目录里，所以能力、上下文长度都得手动写清楚，否则它会按 200K 上下文、32K 输出去猜，白白浪费模型的能力。
+opencode 现在用的是 `providers`（复数）这段配置。`deepseek-v4.1-flash-1017` 不在它内置的目录里，能力、上下文长度得自己写。不写的话它会按 200K 上下文、32K 输出去猜，模型的本事就废了一半。
 
 ```jsonc
 {
@@ -77,13 +77,13 @@ opencode 现在的配置里，自定义 provider 是 `providers`（复数）这�
 }
 ```
 
-令牌放进环境变量，别写进配置文件：
+令牌放环境变量，别写进文件：
 
 ```bash
 export KOURI_API_KEY="sk-kouri-..."
 ```
 
-`env` 里声明了变量名，opencode 会自己去取，不需要额外的 `apiKey` 字段。想先确认 key 和模型 ID 有没有问题，一条 curl 比在客户端里点半天快：
+`env` 里写了变量名，opencode 会自己取，不用再填 `apiKey`。先确认 key 和模型 ID 有没有问题，一条 curl 比在客户端里点半天快：
 
 ```bash
 curl -s https://api.kourichat.com/v1/chat/completions \
@@ -96,48 +96,48 @@ curl -s https://api.kourichat.com/v1/chat/completions \
   }'
 ```
 
-日常直接 `opencode`，临时换档位就在模型后面加 `#`：
+临时换档位，在模型后面加 `#`：
 
 ```bash
 opencode --model kouri/deepseek-v4.1-flash-1017#max
 ```
 
-## 三个参数的实际差别
+## 三个参数，用起来才知道
 
-### 多模态
+### 看图
 
-`input: ["text", "image"]` 不是摆设。改 UI 的时候把截图丢进去问「这个间距为什么塌了」，比用文字描述省很多来回。平台对图片输入不收额外溢价，按普通输入 token 计费，所以我贴截图不怎么犹豫。但它只能看图，不能出图，生成图仍然要去 `/v1/images/generations`。
+`input: ["text", "image"]` 是可以用的。改页面时把截图丢进去问「这个间距为什么塌了」，比打字描述省很多来回。平台对图片不收额外溢价，按普通输入 token 算，所以我贴图不太犹豫。它只能看图，不能出图，要生成图还是去 `/v1/images/generations`。
 
-### 思考等级
+### 思考档位
 
-`reasoning_effort` 只认四档：`none`、`low`、`high`、`max`，默认 `high`。传 `minimal` 会被映射成 `low`，`medium` 和 `xhigh` 都会落到 `high`，`ultra` 变成 `max`——所以别照抄别家的档位名，以为自己在调细档。
+`reasoning_effort` 只有四个值：`none`、`low`、`high`、`max`，默认 `high`。
 
-配置里给 `capabilities.reasoning` 写了 `toggle: true` 和三个档位，opencode 就会生成对应的变体，`#low`、`#max` 直接用。我自己的分配是：改文案、补类型、写注释用 `low`；常规功能开发用默认 `high`；只有那种「跑十分钟也想不通」的 bug 才切 `max`，顺便把会话重开，避免把一堆无关文件带进上下文。
+这里有个坑：`medium` 和 `xhigh` 都会被映射成 `high`，`minimal` 变 `low`，`ultra` 变 `max`。我第一次按别家的习惯传了 `medium`，以为调到了中间档，其实还是 high，白折腾。
 
-还有一条容易撞墙：思考模式下 `temperature`、`presence_penalty`、`frequency_penalty` 都不生效，别在那儿调半天采样温度。
+配置里 `capabilities.reasoning` 写了 `toggle: true` 和三个档位，opencode 会自动生成变体，`#low`、`#max` 直接能用。我自己的分配：改文案、补类型、写注释用 `low`，功能开发留 `high`，那种跑十分钟也想不通的 bug 才切 `max`，并且顺手新开一个会话，免得把一堆无关文件带进上下文。
+
+还有一条：思考模式下 `temperature`、`presence_penalty`、`frequency_penalty` 都不起作用。调半天没变化不是错觉。
 
 ### 上下文
 
-1M 是上限，不是目标。把整个仓库一次性塞进去的结果通常是：首 token 变慢、账单变长、模型在几十个文件里挑错重点。我一般只喂当前任务相关的几个文件，让它自己用工具去读其余部分——工具调用比灌上下文准。
+1M 是上限，不是目标。整个仓库一次性塞进去，首 token 会慢，账单变长，模型还容易在几十个文件里挑错重点。我一般只喂当前任务相关的几个文件，剩下的让它用工具自己读，比灌上下文准。
 
-真正需要长上下文的是「读一份几百页的规范再改代码」这种活。这时候 384K 的输出上限比上下文更值钱：它能一次性把整个模块的改动吐完，不用切三段对话。
+真正需要长上下文的是读规范那种活。这种时候 384K 的输出上限比 1M 输入更值钱，一次能把整个模块的改动吐完，不用切三段对话。
 
-## 几个坑
+## 两个坑
 
-`reasoning_content` 必须回传。DeepSeek 在带 `tools` 的请求里，要求把历史轮次的思考内容拼回上下文，否则 agent 容易提前收工。opencode 对 DeepSeek 默认开着这个行为，但如果自己写客户端，记得别把 reasoning 字段当脏数据删掉——配置里那行 `requireReasoning` 就是干这个的。
+`reasoning_content` 要回传。DeepSeek 在带 `tools` 的请求里，要求把历史轮次的思考内容拼回上下文，否则 agent 容易提前收工。opencode 对 DeepSeek 默认开着这个行为，配置里那行 `requireReasoning` 就是它。自己写客户端的话，别把这个字段当脏数据删掉。
 
-Responses 端点别急着用。文档明确列了一批 DeepSeek 型号不支持 `/v1/responses`，虽然 `deepseek-v4.1-flash` 不在名单里，但既然 Chat 端点全模型可用，也没必要赌。
+另一个是端点选择。文档列了一批不支持 `/v1/responses` 的 DeepSeek 型号，`deepseek-v4.1-flash` 不在名单里，但既然 Chat 端点全模型可用，我没去赌。`max_tokens` 和 `max_completion_tokens` 这类字段名差异在中转层也不一定被抹平，链路的末端是 DeepSeek，写 `max_tokens` 最稳，所以配置里显式指定了。
 
-`max_tokens` 还是 `max_completion_tokens` 这类字段名差异，在中转层不一定被完全抹平。这条链路的末端是 DeepSeek，写 `max_tokens` 最稳，所以配置里显式指定了。
+## 现在怎么用
 
-最后，这是第三方中转，不是官方 API。平台有 fallback 和多可用区，也提供 <https://uptime.kouri.chat/> 的可用性看板，但重要任务该留后手还是留后手。
+日常挂在 `high`，卡住了切 `max`，解决完切回来。账单没细算过，反正比直连便宜，速度也够用。
 
-## 我现在的用法
-
-日常写代码、读代码、整理笔记都留在 `high`，几次大会话跑下来，成本比直连官方低不少；遇到疑难 bug 临时 `#max`，解决完切回来。这算不上什么最佳实践，只是把「贵」和「慢」分开放：平时用便宜的模式跑量，关键时刻再花钱买思考时间。
+配置就这些。哪天模型涨价或者 ID 换了，回来改两行。
 
 ::LinkCard{title="Kouri Ai 控制台" description="注册、建令牌、查模型列表与用量。" href="https://api.kourichat.com/dashboard" icon="brand-openai" icon-bg="var(--app-primary)" icon-color="#ffffff"}
 ::
 
-::LinkCard{title="Kouri Ai 文档" description="端点、计价、缓存与各客户端接入说明。" href="https://docs.kourichat.com" icon="book"}
+::LinkCard{title="Kouri Ai 文档" description="端点、计价、缓存与客户端接入说明。" href="https://docs.kourichat.com" icon="book"}
 ::
