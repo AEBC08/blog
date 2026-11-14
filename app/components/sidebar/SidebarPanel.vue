@@ -13,8 +13,16 @@ const { categories, tags } = await useSidebarData()
 </script>
 
 <template>
-  <ProfileWidget />
-  <TocWidget v-if="isPostPage" />
-  <CategoriesWidget :terms="categories" :active="activeCategory" />
-  <TagsWidget :terms="tags" :active="activeTag" />
+  <div v-reveal>
+    <ProfileWidget />
+  </div>
+  <div v-if="isPostPage" v-reveal="{ delay: 50 }">
+    <TocWidget />
+  </div>
+  <div v-reveal="{ delay: 100 }">
+    <CategoriesWidget :terms="categories" :active="activeCategory" />
+  </div>
+  <div v-reveal="{ delay: 150 }">
+    <TagsWidget :terms="tags" :active="activeTag" />
+  </div>
 </template>

@@ -7,11 +7,24 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+// 卡片进场错峰封顶 360ms，长列表后半段不再叠加等待。
+function stagger(index: number): { delay: number } {
+  return {
+    delay: Math.min(index * 60, 360),
+  }
+}
 </script>
 
 <template>
   <div v-if="props.posts.length" class="space-y-4">
-    <PostCard v-for="post in props.posts" :key="post.path" :post="post" />
+    <div
+      v-for="(post, index) in props.posts"
+      :key="post.path"
+      v-reveal="stagger(index)"
+    >
+      <PostCard :post="post" />
+    </div>
   </div>
 
   <MiuixCard v-else>

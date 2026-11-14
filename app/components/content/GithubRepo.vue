@@ -65,7 +65,7 @@ const token = import.meta.server
  * prerender: the values are serialised into the page payload, so visitors
  * never call the API and the card still renders when the request fails.
  */
-const { data: meta } = await useAsyncData<RepoMeta | null>(
+const { data: meta, status } = await useAsyncData<RepoMeta | null>(
   `github-repo:${props.repo}`,
   async () => {
     try {
@@ -138,10 +138,41 @@ const avatarSrc = computed(() => {
       ? `https://github.com/${owner.value}.png?size=80`
       : null)
 })
+
+/**
+ * The fetch runs at prerender and rides in the page payload, so on first
+ * visit the card is complete; this skeleton only covers the brief window
+ * during client-side navigation while the payload chunk arrives.
+ */
+const loading = computed(() => status.value === 'pending')
 </script>
 
 <template>
+  <!-- 骨架占位：形状与真实卡片一致，避免加载完成后跳动。 -->
+  <div
+    v-if="loading"
+    class="my-6 overflow-hidden rounded-2xl border border-app-divider bg-app-card"
+    aria-hidden="true"
+  >
+    <div class="flex items-center gap-3 border-b border-app-divider bg-app-bg-soft px-4 py-3">
+      <span class="skeleton size-8 shrink-0 rounded-lg" />
+      <span class="min-w-0 flex-1 space-y-1.5">
+        <span class="skeleton block h-3.5 w-40 rounded-full" />
+        <span class="skeleton block h-2.5 w-20 rounded-full" />
+      </span>
+    </div>
+    <div class="px-4 py-3">
+      <span class="skeleton block h-3.5 w-3/4 rounded-full" />
+      <div class="mt-3 flex items-center gap-4">
+        <span class="skeleton h-2.5 w-16 rounded-full" />
+        <span class="skeleton h-2.5 w-12 rounded-full" />
+        <span class="skeleton h-2.5 w-20 rounded-full" />
+      </div>
+    </div>
+  </div>
+
   <a
+    v-else
     :href="link"
     target="_blank"
     rel="noopener noreferrer"
@@ -150,11 +181,14 @@ const avatarSrc = computed(() => {
     <div class="flex items-center gap-3 border-b border-app-divider bg-app-bg-soft px-4 py-3">
       <img
         v-if="avatarSrc"
+        v-img-fade
         :src="avatarSrc"
         :alt="props.repo"
         class="size-8 shrink-0 rounded-lg border border-app-divider object-cover"
         width="32"
         height="32"
+        loading="lazy"
+        decoding="async"
       >
       <span v-else class="grid size-8 shrink-0 place-items-center rounded-lg bg-app-text text-app-card">
         <Icon name="brand-github" :size="18" />

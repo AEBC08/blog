@@ -1,5 +1,6 @@
 <template>
   <div class="flex min-h-screen flex-col">
+    <ScrollProgress />
     <TopBar />
 
     <div class="flex-1 py-6">
