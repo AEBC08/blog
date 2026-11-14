@@ -22,11 +22,44 @@ function isActive(to: string): boolean {
 
   return path.startsWith('/posts/') && !matchesAnotherNavItem
 }
+
+// 顶栏贴附态：页面滚过一屏顶后加深阴影，与内容层拉开层级。
+const scrolled = ref(false)
+let frame = 0
+
+function updateScrolled(): void {
+  frame = 0
+  scrolled.value = window.scrollY > 16
+}
+
+function onScroll(): void {
+  if (frame !== 0) {
+    return
+  }
+
+  frame = window.requestAnimationFrame(updateScrolled)
+}
+
+onMounted(() => {
+  updateScrolled()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+
+  if (frame !== 0) {
+    window.cancelAnimationFrame(frame)
+  }
+})
 </script>
 
 <template>
   <header class="sticky top-0 z-50 px-3 pt-3 sm:px-6">
-    <MiuixCard class="topbar-card mx-auto max-w-6xl rounded-2xl">
+    <MiuixCard
+      class="topbar-card mx-auto max-w-6xl rounded-2xl transition-shadow duration-300"
+      :class="{ 'topbar-scrolled': scrolled }"
+    >
       <div class="flex items-center gap-2 px-2.5 py-2 sm:gap-4 sm:px-4">
         <NuxtLink to="/" class="flex min-w-0 items-center gap-2.5 rounded-xl px-1 py-0.5">
           <img
@@ -65,13 +98,15 @@ function isActive(to: string): boolean {
 
         <div class="flex items-center gap-0.5">
           <a
-            href="https://github.com/AEBC08"
+            v-for="item in appConfig.header.socialLinks"
+            :key="item.href"
+            :href="item.href"
+            :aria-label="item.label"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="GitHub"
             class="hidden size-9 place-items-center rounded-full text-app-text-variant transition-colors hover:bg-app-primary-soft hover:text-app-primary-text sm:grid"
           >
-            <Icon name="brand-github" :size="18" />
+            <Icon :name="item.icon" :size="18" />
           </a>
           <ThemeToggle />
         </div>
