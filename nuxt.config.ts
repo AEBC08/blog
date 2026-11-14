@@ -305,6 +305,7 @@ export default defineNuxtConfig({
             'vue',
             'bash',
             'json',
+            'jsonc',
             'css',
             'html',
             'md',
