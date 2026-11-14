@@ -4,7 +4,7 @@ published: 2026-11-14T12:35:00.000Z
 description: 换掉 OpenCode 的后端，配置贴在这里，以后重装不用再翻文档。
 tags:
   - AI
-  - opencode
+  - OpenCode
   - DeepSeek
   - 工具
 category: 工具
@@ -13,7 +13,7 @@ layout: default
 lang: zh-CN
 ---
 
-直连成本偏高，加上访问不稳定，把 opencode 的后端换成了 [Kouri Ai](https://api.kourichat.com)。用了几天，配置记录如下。
+直连成本偏高，加上访问不稳定，把 OpenCode 的后端换成了 [Kouri Ai](https://api.kourichat.com)。用了几天，配置记录如下。
 
 它属于中转站，模式与 OpenRouter 类似：注册、建令牌、从控制台复制模型 ID、指向 baseURL 即可。除 OpenAI 的 `/v1/chat/completions`，也支持 Anthropic 的 `/v1/messages` 和 Gemini 的 `/v1beta/models`，图片、embedding、rerank 各有端点，换模型不必换客户端。
 
@@ -29,9 +29,9 @@ lang: zh-CN
 
 它不是最强的模型，长任务偶尔偏离。日常改代码、读代码够用，一个仓库的目录加几个关键文件放进去成本可控。真正卡住时才切到 pro 或将档位拉到 max。
 
-## 配置 opencode
+## 配置 OpenCode
 
-opencode 使用 `providers`（复数）配置。`deepseek-v4.1-flash-1017` 不在内置目录中，能力和上下文长度需手动声明；否则会按 200K 上下文、32K 输出推断，模型能力无法充分利用。
+OpenCode 使用 `providers`（复数）配置。`deepseek-v4.1-flash-1017` 不在内置目录中，能力和上下文长度需手动声明；否则会按 200K 上下文、32K 输出推断，模型能力无法充分利用。
 
 ```jsonc
 {
@@ -83,7 +83,7 @@ opencode 使用 `providers`（复数）配置。`deepseek-v4.1-flash-1017` 不�
 export KOURI_API_KEY="sk-kouri-..."
 ```
 
-`env` 中已声明变量名，opencode 会自动读取，无需另填 `apiKey`。先用 curl 确认 key 和模型 ID：
+`env` 中已声明变量名，OpenCode 会自动读取，无需另填 `apiKey`。先用 curl 确认 key 和模型 ID：
 
 ```bash
 curl -s https://api.kourichat.com/v1/chat/completions \
@@ -114,7 +114,7 @@ opencode --model kouri/deepseek-v4.1-flash-1017#max
 
 注意：`medium` 和 `xhigh` 均映射为 `high`，`minimal` 变为 `low`，`ultra` 变为 `max`。按其他平台习惯传 `medium` 实际仍是 high。
 
-配置中 `capabilities.reasoning` 声明了 `toggle: true` 和三个档位，opencode 会自动生成变体，`#low`、`#max` 可直接使用。个人分配：改文案、补类型、写注释用 `low`，功能开发用 `high`，长时间无法定位的 bug 才切 `max`，并同时新建会话，避免无关文件进入上下文。
+配置中 `capabilities.reasoning` 声明了 `toggle: true` 和三个档位，OpenCode 会自动生成变体，`#low`、`#max` 可直接使用。个人分配：改文案、补类型、写注释用 `low`，功能开发用 `high`，长时间无法定位的 bug 才切 `max`，并同时新建会话，避免无关文件进入上下文。
 
 另一点：思考模式下 `temperature`、`presence_penalty`、`frequency_penalty` 均不生效。
 
@@ -126,7 +126,7 @@ opencode --model kouri/deepseek-v4.1-flash-1017#max
 
 ## 两个注意事项
 
-`reasoning_content` 需要回传。DeepSeek 在带 `tools` 的请求中要求将历史轮次的思考内容拼回上下文，否则 agent 容易提前结束。opencode 对 DeepSeek 默认开启该行为，配置中的 `requireReasoning` 即对应此点。自行实现客户端时不要删除该字段。
+`reasoning_content` 需要回传。DeepSeek 在带 `tools` 的请求中要求将历史轮次的思考内容拼回上下文，否则 agent 容易提前结束。OpenCode 对 DeepSeek 默认开启该行为，配置中的 `requireReasoning` 即对应此点。自行实现客户端时不要删除该字段。
 
 端点选择方面，文档列出部分不支持 `/v1/responses` 的 DeepSeek 型号，`deepseek-v4.1-flash` 不在名单中，但 Chat 端点全模型可用，未做额外尝试。`max_tokens` 与 `max_completion_tokens` 这类字段名差异在中转层未必统一，链路末端是 DeepSeek，写 `max_tokens` 最稳妥，配置中已显式指定。
 
