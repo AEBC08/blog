@@ -10,6 +10,8 @@ export interface MusicTrack {
 }
 
 export interface MusicPlaylist {
+  /** NetEase playlist id; falls back to `site.config.ts` when missing. */
+  id?: number
   name: string
   cover: string
   tracks: MusicTrack[]
@@ -51,6 +53,15 @@ export function useMusicPlayer() {
   const source = computed(() => currentTrack.value
     ? `https://music.163.com/song/media/outer/url?id=${currentTrack.value.id}.mp3`
     : '')
+
+  /** Mobile playlist page; the snapshot carries the id so config drift is safe. */
+  const playlistUrl = computed(() => {
+    const id = playlist.value?.id ?? Number(appConfig.music.playlistId)
+
+    return Number.isFinite(id) && id > 0
+      ? `https://music.163.com/m/playlist?id=${id}`
+      : ''
+  })
 
   /**
    * Same-origin snapshot: prefix the site baseURL (the repo deploys under
@@ -241,6 +252,7 @@ export function useMusicPlayer() {
     tracks,
     currentTrack,
     source,
+    playlistUrl,
     index,
     playing,
     time,

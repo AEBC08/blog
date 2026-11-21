@@ -70,3 +70,9 @@
 - 就算有 CORS，这台机器上的浏览器也会把**所有跨源 fetch** 判成 `LocalNetworkAccessPermissionDenied`（系统代理 / 广告拦截器让目标地址被识别为本地网络），`net::ERR_FAILED`。同源请求不受影响。
 
 结论：静态站点想「客户端直连网易云」必须经过代理，而代理是跨源，会撞上同一条限制。所以保留「构建期同步 + 同源 JSON」，把 cron 从每 6 小时改成每 30 分钟（`*/30 * * * *`），并在定时构建里跳过 lint/typecheck（代码没变）。数据延迟约为「半个 cron 周期 + 一次构建（约 75 秒）」。
+
+## 快照带歌单 id，卡片加外链（2026-11-21）
+
+- `scripts/sync-playlist.mjs` 现在把 `id` 写进快照；变化判定也看 `id / name / cover / tracks`，所以歌单改名、换封面都会触发重写（之前只比 tracks，改名会被跳过）。名字本身一直取自官方接口的 `playlist.name`。
+- `useMusicPlayer()` 暴露 `playlistUrl`：优先用快照里的 `id`，缺失时退回 `site.config.ts` 的 `music.playlistId`，指向 `https://music.163.com/m/playlist?id=<id>`。
+- `MusicCard` 头部「N 首」右边加了 `arrow-up-right` 图标链接，`target="_blank"` + `rel="noopener noreferrer"`，侧边栏与顶栏弹层共用。

@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
 const {
   tracks,
   currentTrack,
+  playlistUrl,
   index,
   playing,
   time,
@@ -142,7 +143,20 @@ function onSeekKey(event: KeyboardEvent): void {
           <Icon name="miuix:Music" class="text-app-primary-text" :size="16" />
           音乐
         </h2>
-        <span class="text-[10px] font-medium text-app-text-faint">{{ tracks.length }} 首</span>
+        <div class="flex items-center gap-1.5">
+          <span class="text-[10px] font-medium text-app-text-faint">{{ tracks.length }} 首</span>
+          <a
+            v-if="playlistUrl"
+            :href="playlistUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-full p-1 text-app-text-faint transition-colors hover:text-app-text"
+            aria-label="在网易云音乐中打开歌单"
+            title="在网易云音乐中打开歌单"
+          >
+            <Icon name="arrow-up-right" :size="14" />
+          </a>
+        </div>
       </div>
 
       <template v-if="currentTrack">

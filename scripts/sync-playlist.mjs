@@ -32,8 +32,9 @@ function toHttps(url) {
     : ''
 }
 
-function normalize(playlist) {
+function normalize(playlist, fallbackId) {
   return {
+    id: Number(playlist.id ?? fallbackId),
     name: playlist.name ?? '歌单',
     cover: toHttps(playlist.coverImgUrl),
     tracks: (playlist.tracks ?? []).map(track => ({
@@ -71,7 +72,7 @@ async function main() {
     throw new Error('接口没有返回曲目，歌单可能被删除或设为私密')
   }
 
-  const data = normalize(playlist)
+  const data = normalize(playlist, id)
 
   let previous = null
 
@@ -82,7 +83,13 @@ async function main() {
     // First run or a bad file: just write a fresh snapshot.
   }
 
-  if (previous && JSON.stringify(previous.tracks) === JSON.stringify(data.tracks)) {
+  const unchanged = previous
+    && previous.id === data.id
+    && previous.name === data.name
+    && previous.cover === data.cover
+    && JSON.stringify(previous.tracks) === JSON.stringify(data.tracks)
+
+  if (unchanged) {
     console.warn('歌单没有变化，跳过写入')
     return
   }

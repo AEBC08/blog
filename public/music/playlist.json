@@ -1,6 +1,7 @@
 {
+  "id": 18597875286,
   "name": "MyBlogMusic",
-  "cover": "https://p1.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
+  "cover": "https://p2.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
   "tracks": [
     {
       "id": 2729835929,
@@ -8,13 +9,6 @@
       "artists": "Quiet Comet / Singto Conley / Moon Jelly",
       "cover": "https://p2.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
       "duration": 222000
-    },
-    {
-      "id": 430208127,
-      "name": "vignette",
-      "artists": "牛尾憲輔",
-      "cover": "https://p2.music.126.net/ZXF3bBgvrGctmQKXvQx9CQ==/18782957137588160.jpg",
-      "duration": 153280
     },
     {
       "id": 424985022,
@@ -73,5 +67,5 @@
       "duration": 233218
     }
   ],
-  "updatedAt": "2026-11-21T14:27:39.473Z"
+  "updatedAt": "2026-11-21T15:47:02.220Z"
 }
