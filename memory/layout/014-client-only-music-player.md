@@ -59,3 +59,14 @@
 - `data` 分支保留但已无引用，可以随时删除。
 
 代价：歌单更新最多滞后一个 cron 周期 + 一次构建；换来的是不依赖任何第三方域名，国内网络和广告拦截器都不会再影响它。
+
+## 为什么不能在客户端直接请求网易云（2026-11-21 深夜）
+
+用户希望能「浏览器直接 fetch 网易云接口」，这样改歌单立刻生效。实测下来这条路走不通，证据：
+
+- `GET https://music.163.com/api/playlist/detail?id=…`：响应没有任何 `Access-Control-Allow-Origin`，浏览器读取会被 CORS 拦掉。
+- 加 `callback=cb` 也没有 JSONP 包装（返回仍是裸 JSON），所以 `<script>` 注入也拿不到数据；`mode: 'no-cors'` 只能拿到 opaque 响应，读不了内容。
+- 换域名（`interface.music.163.com`、`m.music.163.com`、`api/v6`）同样没有 CORS 头。
+- 就算有 CORS，这台机器上的浏览器也会把**所有跨源 fetch** 判成 `LocalNetworkAccessPermissionDenied`（系统代理 / 广告拦截器让目标地址被识别为本地网络），`net::ERR_FAILED`。同源请求不受影响。
+
+结论：静态站点想「客户端直连网易云」必须经过代理，而代理是跨源，会撞上同一条限制。所以保留「构建期同步 + 同源 JSON」，把 cron 从每 6 小时改成每 30 分钟（`*/30 * * * *`），并在定时构建里跳过 lint/typecheck（代码没变）。数据延迟约为「半个 cron 周期 + 一次构建（约 75 秒）」。

@@ -5,8 +5,11 @@ on:
     branches:
       - main
   schedule:
-    # Rebuild every six hours so the playlist snapshot picks up playlist edits.
-    - cron: '0 */6 * * *'
+    # The browser cannot call NetEase directly (no CORS, no JSONP), so the only
+    # way to refresh the playlist is to rebuild with a fresh same-origin
+    # snapshot. Half-hourly keeps it close to live; scheduled runs skip the
+    # lint/typecheck gates because the code itself did not change.
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -48,9 +51,11 @@ jobs:
         continue-on-error: true
 
       - name: Lint
+        if: github.event_name != 'schedule'
         run: pnpm lint
 
       - name: Typecheck
+        if: github.event_name != 'schedule'
         run: pnpm typecheck
 
       - name: Build
