@@ -173,12 +173,6 @@ export function useMusicPlayer() {
   }
 
   function previous(): void {
-    // Same behaviour as every other player: restart first, then go back.
-    if (audioEl && audioEl.currentTime > 3) {
-      audioEl.currentTime = 0
-      return
-    }
-
     const total = tracks.value.length
 
     if (total === 0) {

@@ -82,7 +82,7 @@
 `MusicAudioHost` 里接了 Media Session API，Windows 的媒体浮层、Chrome 的媒体中心、锁屏和耳机按键都能控制这一份 audio：
 
 - `metadata`：歌名 / 歌手 / 歌单名 / 封面（`?param=96y96`、`192`、`384` 三档），曲目或歌单名变化时刷新。
-- `setActionHandler`：`play / pause / stop / previoustrack / nexttrack / seekbackward / seekforward / seekto`。前一首还是沿用 3 秒规则；`stop` 是暂停并回到 0。
+- `setActionHandler`：`play / pause / stop / previoustrack / nexttrack / seekbackward / seekforward / seekto`。前一首直接切上一首（2026-11-22 去掉了「先回到 0:00」的 3 秒规则）；`stop` 是暂停并回到 0。
 - `playbackState` 跟 `playing` 同步；`setPositionState` 跟 `time` / `duration` 同步（拖动进度条也会更新）。
 - 为了不让播放器只有「按比例跳」的能力，composable 新增 `seekTo(seconds)` 与 `seekBy(delta)`。
 - 全部调用都做了特性检测和 try/catch：不支持的浏览器按原样跑，不报错。
