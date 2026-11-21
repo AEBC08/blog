@@ -46,3 +46,16 @@
 - 刷新时如果 `index` 越界（歌单变短）会回到第 0 首，并重置进度。
 
 结论：这里的「本地缓存」是 HTTP 缓存，不是我们自己的 localStorage；播放器从前到后没有写任何浏览器存储。
+
+## 改为同源快照（2026-11-21 晚，最终方案）
+
+把浏览器日志翻出来后才看清真正的原因：从页面里发起的**所有跨源请求都失败**，`raw.githubusercontent.com`、`api.github.com`、`cdn.jsdelivr.net` 一视同仁，`Network.loadingFailed` 的 `corsErrorStatus` 是 `LocalNetworkAccessPermissionDenied`，`errorText` 是 `net::ERR_FAILED`；而直接在地址栏打开同一个 URL 却是 200。用户的 Edge 装了 AdGuard，请求走本地代理，Chrome/Edge 的 Local Network Access 判定为「访问本地网络」，于是全部拦掉。也就是说，问题不在 CORS 头，也不在缓存，而是**任何跨源都不可用**。
+
+所以放弃了 `data` 分支 + `raw.githubusercontent.com` 这一层：
+
+- 快照改放 **`public/music/playlist.json`**，随站点一起部署，浏览器只请求 `{baseURL}music/playlist.json`（站点部署在 `/blog/`，运行时用 `runtimeConfig.app.baseURL` 拼）。
+- `.github/workflows/music.yml` 删除；`deploy.yml` 增加了 `schedule: cron '0 */6 * * *'`，并在 Build 前跑 `node scripts/sync-playlist.mjs`（`continue-on-error: true`，接口抽风时退回仓库里的上一版快照）。每 6 小时自动重建一次，不需要手动触发。
+- `site.config.ts` 的 `music.dataUrl` 换成 `music.dataPath: '/music/playlist.json'`；保留按分钟分桶的 `?v=` 与 `cache: 'no-store'`，避免 Pages CDN 挡住新部署。
+- `data` 分支保留但已无引用，可以随时删除。
+
+代价：歌单更新最多滞后一个 cron 周期 + 一次构建；换来的是不依赖任何第三方域名，国内网络和广告拦截器都不会再影响它。

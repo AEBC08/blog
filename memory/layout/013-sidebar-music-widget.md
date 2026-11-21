@@ -1,7 +1,7 @@
 # 侧边栏音乐播放器：构建期取歌单，运行时用官方直链播放
 
 - 日期：2026-11-15
-- 状态：已废弃（被 014 改为客户端取数 + data 分支快照）
+- 状态：已废弃（被 014 改为客户端取数 + 同源 JSON 快照）
 - 相关文件：`app/components/sidebar/MusicWidget.vue`、`app/components/sidebar/SidebarPanel.vue`、`site.config.ts`、`app/utils/icon-registry.ts`
 
 ## 背景

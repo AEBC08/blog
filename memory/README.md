@@ -28,7 +28,7 @@
 - [011 全局视觉动效：页面过渡、滚动进度条与内容渐显](layout/011-page-transition-progress-reveal.md)：`pageTransition` out-in 过渡、顶部 `scaleX` 阅读进度条、`v-reveal` IntersectionObserver 渐显、顶栏贴附阴影与滚动条/选区打磨，开关集中在 `effects` 分组。
 - [012 目录高亮、骨架屏、图片淡入、评论系统与友链页](layout/012-toc-skeleton-image-giscus-friends.md)：目录滚动位置算法（含 scrollIntoView 回弹教训）、GithubRepo 骨架屏、`ProseImg`/`v-img-fade` 图片懒加载淡入、giscus 评论区（参数未填全不渲染）、`/friends` 友链页。
 - [013 侧边栏音乐播放器：构建期取歌单，运行时官方直链](layout/013-sidebar-music-widget.md)：**已废弃**。构建期快照导致改歌单必须重新构建，被 014 取代。
-- [014 音乐播放器改为客户端取数 + 全站单实例音频](layout/014-client-only-music-player.md)：官方接口无 CORS，改用定时任务把歌单同步到 `data` 分支的 JSON 快照；组件 `<ClientOnly>`，`<audio>` 挂在 layout 里实现跨页播放，顶栏新增弹层入口。
+- [014 音乐播放器改为客户端取数 + 全站单实例音频](layout/014-client-only-music-player.md)：歌单快照放在 `public/music/playlist.json` 由站点同源提供，部署流程每 6 小时同步一次；跨源方案（`data` 分支 / raw.githubusercontent）因为浏览器把跨源请求全判定为本地网络访问而放弃。组件 `<ClientOnly>`，`<audio>` 挂在 layout 里实现跨页播放，顶栏新增弹层入口。
 
 ### content
 

@@ -26,13 +26,14 @@ const MODE_ORDER: PlayMode[] = ['list', 'one', 'shuffle']
 let audioEl: HTMLAudioElement | null = null
 
 /**
- * Playlist data is fetched in the browser from a JSON snapshot that a scheduled
- * workflow refreshes from the official NetEase endpoint. The endpoint itself
- * sends no CORS headers, so calling it from a page is impossible; the snapshot
- * keeps the widget client-only and lets playlist edits show up without a build.
+ * Playlist data is fetched in the browser from a JSON snapshot served from the
+ * site itself: the deploy workflow refreshes `public/music/playlist.json` from
+ * the official NetEase endpoint before building. Same-origin means no CORS and
+ * no third-party CDN, both of which turned out to be unreliable.
  */
 export function useMusicPlayer() {
   const appConfig = useAppConfig()
+  const runtimeConfig = useRuntimeConfig()
 
   const playlist = useState<MusicPlaylist | null>('music:playlist', () => null)
   const pending = useState('music:pending', () => false)
@@ -52,17 +53,17 @@ export function useMusicPlayer() {
     : '')
 
   /**
-   * GitHub's CDN caches the snapshot for five minutes and will happily serve a
-   * cached 404 as well, which is why a plain reload used to keep showing the
-   * error long after the data existed. A bucketed query plus `no-store` makes
-   * every load a real request; the payload is 2 KB, so this is cheap.
+   * Same-origin snapshot: prefix the site baseURL (the repo deploys under
+   * `/blog/`) and bucket the query by the minute. The bucket costs nothing on a
+   * 2 KB file and keeps a redeploy from hiding behind the Pages CDN.
    */
-  function snapshotUrl(base: string): string {
-    const bucket = Math.floor(Date.now() / 60_000)
+  function snapshotUrl(): string {
+    const base = runtimeConfig.app.baseURL.endsWith('/')
+      ? runtimeConfig.app.baseURL
+      : `${runtimeConfig.app.baseURL}/`
+    const path = appConfig.music.dataPath.replace(/^\//, '')
 
-    return `${base}${base.includes('?')
-      ? '&'
-      : '?'}v=${bucket}`
+    return `${base}${path}?v=${Math.floor(Date.now() / 60_000)}`
   }
 
   async function load(force = false): Promise<void> {
@@ -74,7 +75,7 @@ export function useMusicPlayer() {
     unavailable.value = false
 
     try {
-      const data = await $fetch<MusicPlaylist>(snapshotUrl(appConfig.music.dataUrl), {
+      const data = await $fetch<MusicPlaylist>(snapshotUrl(), {
         timeout: 15_000,
         cache: 'no-store',
       })

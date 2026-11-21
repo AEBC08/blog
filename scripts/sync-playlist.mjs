@@ -4,10 +4,10 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 
 /**
- * Mirrors the official NetEase playlist endpoint into a JSON snapshot the site
- * can fetch from the browser (the API itself sends no CORS headers). Run by
- * .github/workflows/music.yml on a schedule; the output lives on the `data`
- * branch so refreshing it never rebuilds the site.
+ * Mirrors the official NetEase playlist endpoint into the JSON snapshot the
+ * site serves from its own origin (`public/music/playlist.json`). Run by the
+ * Pages deploy workflow before building; the browser never talks to NetEase or
+ * a third-party CDN, which is what broke the cross-origin variants.
  */
 
 const API = 'https://music.163.com/api/playlist/detail'

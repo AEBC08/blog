@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Rebuild every six hours so the playlist snapshot picks up playlist edits.
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -35,6 +38,14 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # The browser only ever reads a same-origin snapshot: fetching NetEase (or
+      # a JSON host) cross-origin fails behind CORS, tracking prevention or a
+      # flaky CDN. Refreshing it here keeps the client simple; a failure falls
+      # back to the committed copy.
+      - name: Refresh playlist snapshot
+        run: node scripts/sync-playlist.mjs
+        continue-on-error: true
 
       - name: Lint
         run: pnpm lint

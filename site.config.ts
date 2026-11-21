@@ -57,16 +57,16 @@ export const siteConfig = {
 
   /**
    * 侧边栏与顶栏共用的音乐播放器。
-   * 歌单数据由 .github/workflows/music.yml 定时从网易云官方接口同步到 data 分支，
-   * 页面运行时再拉这份 JSON，所以改歌单不需要重新构建站点。
+   * 歌单数据是站点同源的 JSON 快照（public/music/playlist.json），部署流程在
+   * 构建前用官方接口刷新它；页面运行时只读这份文件，跨域和 CDN 都不参与。
    */
   music: {
     /** 关掉后侧边栏卡片与顶栏按钮都不再渲染。 */
     enabled: true,
     /** 网易云歌单 ID（分享链接里 id 后面的那串数字）。 */
     playlistId: '18597875286',
-    /** 定时任务写入的 JSON 快照。 */
-    dataUrl: 'https://raw.githubusercontent.com/AEBC08/blog/data/music/playlist.json',
+    /** 相对站点 baseURL 的快照路径。 */
+    dataPath: '/music/playlist.json',
   },
 
   /** 顶部导航，顺序即显示顺序。 */
