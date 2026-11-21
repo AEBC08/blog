@@ -19,9 +19,6 @@ const {
   time,
   duration,
   mode,
-  pending,
-  unavailable,
-  load,
   toggle,
   next,
   previous,
@@ -48,10 +45,6 @@ const dragRatio = ref(0)
 const listOpen = ref(false)
 
 const modeIcon = computed(() => MODE_ICON[mode.value] ?? 'repeat')
-
-function retry(): void {
-  void load(true)
-}
 
 const ratio = computed(() => {
   if (dragging.value) {
@@ -296,23 +289,6 @@ function onSeekKey(event: KeyboardEvent): void {
           </div>
         </div>
       </template>
-
-      <p v-else-if="pending" class="mt-3 text-[11px] leading-5 text-app-text-faint">
-        歌单加载中…
-      </p>
-
-      <div v-else-if="unavailable" class="mt-3 flex items-center justify-between gap-2">
-        <p class="text-[11px] leading-5 text-app-text-faint">
-          歌单暂时取不到。
-        </p>
-        <button
-          type="button"
-          class="shrink-0 rounded-full px-2 py-1 text-[11px] font-medium text-app-primary-text transition-colors hover:bg-app-primary-soft"
-          @click="retry"
-        >
-          重试
-        </button>
-      </div>
     </div>
   </component>
 </template>

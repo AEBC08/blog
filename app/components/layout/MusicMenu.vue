@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { MiuixIconButton } from 'miuix-vue'
 
-const { playing, load } = useMusicPlayer()
+const { playing } = useMusicPlayer()
 const open = ref(false)
 const root = ref<HTMLElement | null>(null)
 
 function toggle(): void {
   open.value = !open.value
-
-  if (open.value) {
-    void load()
-  }
 }
 
 function onPointerDown(event: PointerEvent): void {
@@ -73,14 +69,7 @@ onBeforeUnmount(() => {
         aria-label="音乐播放器"
         class="absolute right-0 top-full z-50 mt-2 w-72 max-w-[calc(100vw-1.5rem)] origin-top-right rounded-2xl border border-app-divider bg-app-card shadow-[var(--app-shadow-hover)]"
       >
-        <ClientOnly>
-          <MusicCard variant="panel" />
-          <template #fallback>
-            <p class="p-4 text-[11px] text-app-text-faint">
-              歌单加载中…
-            </p>
-          </template>
-        </ClientOnly>
+        <MusicCard variant="panel" />
       </div>
     </Transition>
   </div>

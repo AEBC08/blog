@@ -7,7 +7,6 @@ const {
   time,
   duration,
   setAudio,
-  load,
   play,
   pause,
   next,
@@ -67,7 +66,7 @@ function syncMetadata(): void {
   api.metadata = new MediaMetadata({
     title: track.name,
     artist: track.artists,
-    album: playlist.value?.name ?? '',
+    album: playlist.name ?? '',
     artwork: track.cover
       ? ARTWORK_SIZES.map(size => ({
           src: `${track.cover}?param=${size}y${size}`,
@@ -138,15 +137,7 @@ function clearHandlers(): void {
   }
 }
 
-/** Coming back from offline is the most common reason the first load failed. */
-function onOnline(): void {
-  void load()
-}
-
-watch([
-  currentTrack,
-  () => playlist.value?.name,
-], syncMetadata)
+watch(currentTrack, syncMetadata)
 watch([time, duration], syncPosition)
 watch(playing, (value) => {
   const api = session()
@@ -163,14 +154,11 @@ onMounted(() => {
   bindHandlers()
   syncMetadata()
   syncPosition()
-  void load()
-  window.addEventListener('online', onOnline)
 })
 
 onBeforeUnmount(() => {
   setAudio(null)
   clearHandlers()
-  window.removeEventListener('online', onOnline)
 
   const api = session()
 

@@ -4,14 +4,13 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 
 /**
- * Mirrors the official NetEase playlist endpoint into the JSON snapshot the
- * site serves from its own origin (`public/music/playlist.json`). Run by the
- * Pages deploy workflow before building; the browser never talks to NetEase or
- * a third-party CDN, which is what broke the cross-origin variants.
+ * Mirrors the official NetEase playlist endpoint into `data/playlist.json`.
+ * The deploy workflow runs this right before `nuxt build`, so the playlist is
+ * baked into the rendered HTML; if the API is down the committed copy is used.
  */
 
 const API = 'https://music.163.com/api/playlist/detail'
-const TARGET = resolve(process.argv[2] ?? 'public/music/playlist.json')
+const TARGET = resolve(process.argv[2] ?? 'data/playlist.json')
 
 /** The playlist id lives in site.config.ts; reading it keeps one source. */
 async function readPlaylistId() {

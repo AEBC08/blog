@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { MiuixCard } from 'miuix-vue'
-
 const route = useRoute()
 
 const isPostPage = computed(() => /^\/posts\/[^/]+/.test(route.path))
@@ -22,23 +20,8 @@ const { categories, tags } = await useSidebarData()
     <TocWidget />
   </div>
   <div v-reveal="{ delay: 100 }">
-    <!-- 播放器只认客户端数据：歌单更新走定时同步，不需要重新构建站点。 -->
-    <ClientOnly>
-      <MusicCard variant="sidebar" />
-      <template #fallback>
-        <MiuixCard>
-          <div class="p-4">
-            <h2 class="widget-title flex items-center gap-2 text-sm font-bold text-app-text">
-              <Icon name="miuix:Music" class="text-app-primary-text" :size="16" />
-              音乐
-            </h2>
-            <p class="mt-3 text-[11px] leading-5 text-app-text-faint">
-              歌单加载中…
-            </p>
-          </div>
-        </MiuixCard>
-      </template>
-    </ClientOnly>
+    <!-- 歌单在构建期写进 HTML，不需要客户端再取一次。 -->
+    <MusicCard variant="sidebar" />
   </div>
   <div v-reveal="{ delay: 150 }">
     <CategoriesWidget :terms="categories" :active="activeCategory" />

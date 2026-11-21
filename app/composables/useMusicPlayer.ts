@@ -1,3 +1,5 @@
+import playlistSnapshot from '../../data/playlist.json'
+
 export type PlayMode = 'list' | 'one' | 'shuffle'
 
 export interface MusicTrack {
@@ -28,25 +30,22 @@ const MODE_ORDER: PlayMode[] = ['list', 'one', 'shuffle']
 let audioEl: HTMLAudioElement | null = null
 
 /**
- * Playlist data is fetched in the browser from a JSON snapshot served from the
- * site itself: the deploy workflow refreshes `public/music/playlist.json` from
- * the official NetEase endpoint before building. Same-origin means no CORS and
- * no third-party CDN, both of which turned out to be unreliable.
+ * The playlist is baked into the build: `data/playlist.json` is refreshed by the
+ * deploy workflow right before `nuxt build`, so the card is part of the rendered
+ * HTML and needs no runtime fetch. Editing a playlist costs one rebuild, which
+ * the workflow only triggers when the snapshot actually changed.
  */
 export function useMusicPlayer() {
   const appConfig = useAppConfig()
-  const runtimeConfig = useRuntimeConfig()
 
-  const playlist = useState<MusicPlaylist | null>('music:playlist', () => null)
-  const pending = useState('music:pending', () => false)
-  const unavailable = useState('music:unavailable', () => false)
+  const playlist = playlistSnapshot as MusicPlaylist
   const index = useState('music:index', () => 0)
   const playing = useState('music:playing', () => false)
   const time = useState('music:time', () => 0)
-  const duration = useState('music:duration', () => 0)
+  const duration = useState('music:duration', () => (playlist.tracks[0]?.duration ?? 0) / 1000)
   const mode = useState<PlayMode>('music:mode', () => 'list')
 
-  const tracks = computed(() => playlist.value?.tracks ?? [])
+  const tracks = computed(() => playlist.tracks)
   const currentTrack = computed<MusicTrack | undefined>(() => tracks.value[index.value])
 
   /** Official redirect endpoint; `<audio>` follows it, so no CORS is involved. */
@@ -56,62 +55,12 @@ export function useMusicPlayer() {
 
   /** Mobile playlist page; the snapshot carries the id so config drift is safe. */
   const playlistUrl = computed(() => {
-    const id = playlist.value?.id ?? Number(appConfig.music.playlistId)
+    const id = playlist.id ?? Number(appConfig.music.playlistId)
 
     return Number.isFinite(id) && id > 0
       ? `https://music.163.com/m/playlist?id=${id}`
       : ''
   })
-
-  /**
-   * Same-origin snapshot: prefix the site baseURL (the repo deploys under
-   * `/blog/`) and bucket the query by the minute. The bucket costs nothing on a
-   * 2 KB file and keeps a redeploy from hiding behind the Pages CDN.
-   */
-  function snapshotUrl(): string {
-    const base = runtimeConfig.app.baseURL.endsWith('/')
-      ? runtimeConfig.app.baseURL
-      : `${runtimeConfig.app.baseURL}/`
-    const path = appConfig.music.dataPath.replace(/^\//, '')
-
-    return `${base}${path}?v=${Math.floor(Date.now() / 60_000)}`
-  }
-
-  async function load(force = false): Promise<void> {
-    if (pending.value || (playlist.value && !force)) {
-      return
-    }
-
-    pending.value = true
-    unavailable.value = false
-
-    try {
-      const data = await $fetch<MusicPlaylist>(snapshotUrl(), {
-        timeout: 15_000,
-        cache: 'no-store',
-      })
-
-      if (data?.tracks?.length) {
-        playlist.value = data
-
-        if (index.value >= data.tracks.length) {
-          index.value = 0
-        }
-
-        time.value = 0
-        duration.value = (data.tracks[index.value]?.duration ?? 0) / 1000
-      }
-      else {
-        unavailable.value = true
-      }
-    }
-    catch {
-      unavailable.value = true
-    }
-    finally {
-      pending.value = false
-    }
-  }
 
   function setAudio(el: HTMLAudioElement | null): void {
     audioEl = el
@@ -270,9 +219,6 @@ export function useMusicPlayer() {
     time,
     duration,
     mode,
-    pending,
-    unavailable,
-    load,
     toggle,
     play,
     pause,

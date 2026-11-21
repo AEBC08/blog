@@ -57,16 +57,14 @@ export const siteConfig = {
 
   /**
    * 侧边栏与顶栏共用的音乐播放器。
-   * 歌单数据是站点同源的 JSON 快照（public/music/playlist.json），部署流程在
-   * 构建前用官方接口刷新它；页面运行时只读这份文件，跨域和 CDN 都不参与。
+   * 歌单快照在 data/playlist.json，由部署工作流在构建前用官方接口刷新；
+   * 数据会直接写进构建产物，页面运行时不再请求任何接口。
    */
   music: {
     /** 关掉后侧边栏卡片与顶栏按钮都不再渲染。 */
     enabled: true,
     /** 网易云歌单 ID（分享链接里 id 后面的那串数字）。 */
     playlistId: '18597875286',
-    /** 相对站点 baseURL 的快照路径。 */
-    dataPath: '/music/playlist.json',
   },
 
   /** 顶部导航，顺序即显示顺序。 */

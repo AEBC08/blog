@@ -5,15 +5,13 @@ on:
     branches:
       - main
   schedule:
-    # The browser cannot call NetEase directly (no CORS, no JSONP), so the only
-    # way to refresh the playlist is to rebuild with a fresh same-origin
-    # snapshot. Half-hourly keeps it close to live; scheduled runs skip the
-    # lint/typecheck gates because the code itself did not change.
+    # Every half hour, but the build only runs when the playlist actually
+    # changed; an idle playlist costs a few seconds instead of a full build.
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -22,7 +20,48 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Cheap job: refresh the snapshot, commit it when it moved, and tell the build
+  # job whether a rebuild is worth it.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Refresh playlist snapshot
+        run: node scripts/sync-playlist.mjs
+        continue-on-error: true
+
+      - name: Detect playlist changes
+        id: diff
+        run: |
+          if git diff --quiet -- data/playlist.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Persist the fresh snapshot so the committed copy never goes stale; the
+      # build re-reads it, and [skip ci] keeps this push from looping.
+      - name: Commit snapshot
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/playlist.json
+          git commit -m "chore: sync netease playlist [skip ci]"
+          git push
+
   build:
+    needs: check
+    if: github.event_name != 'schedule' || needs.check.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,10 +81,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # The browser only ever reads a same-origin snapshot: fetching NetEase (or
-      # a JSON host) cross-origin fails behind CORS, tracking prevention or a
-      # flaky CDN. Refreshing it here keeps the client simple; a failure falls
-      # back to the committed copy.
+      # The playlist is baked into the build, so read the freshest snapshot
+      # here too; a failure just falls back to the committed copy.
       - name: Refresh playlist snapshot
         run: node scripts/sync-playlist.mjs
         continue-on-error: true
