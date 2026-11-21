@@ -9,5 +9,6 @@
 
     <FooterBar />
     <BackToTop />
+    <MusicAudioHost />
   </div>
 </template>

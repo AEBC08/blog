@@ -1,119 +1,51 @@
 <script setup lang="ts">
 import { MiuixCard } from 'miuix-vue'
 
-interface Track {
-  id: number
-  name: string
-  artists: string
-  cover: string
-  /** Milliseconds, as returned by the API. */
-  duration: number
+interface Props {
+  /** `sidebar` renders inside a MiuixCard, `panel` sits in the top bar popover. */
+  variant?: 'sidebar' | 'panel'
 }
 
-interface PlaylistData {
-  name: string
-  cover: string
-  tracks: Track[]
-}
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'sidebar',
+})
 
-interface NeteaseTrack {
-  id: number
-  name: string
-  duration: number
-  artists?: { name: string }[]
-  album?: { picUrl?: string }
-}
+const {
+  tracks,
+  currentTrack,
+  index,
+  playing,
+  time,
+  duration,
+  mode,
+  pending,
+  unavailable,
+  toggle,
+  next,
+  previous,
+  select,
+  cycleMode,
+  seek,
+} = useMusicPlayer()
 
-interface NeteasePlaylist {
-  result?: {
-    name?: string
-    coverImgUrl?: string
-    tracks?: NeteaseTrack[]
-  }
-}
-
-type PlayMode = 'list' | 'one' | 'shuffle'
-
-const MODE_ICON: Record<PlayMode, string> = {
+const MODE_ICON: Record<string, string> = {
   list: 'repeat',
   one: 'repeat-once',
   shuffle: 'arrows-shuffle',
 }
 
-const appConfig = useAppConfig()
-const playlistId = appConfig.music.playlistId
-
-/** The API hands back `http://` covers; the page is https and must not regress. */
-function toHttps(url?: string): string {
-  return url
-    ? url.replace(/^http:/, 'https:')
-    : ''
+const MODE_LABEL: Record<string, string> = {
+  list: '列表循环',
+  one: '单曲循环',
+  shuffle: '随机播放',
 }
 
-/**
- * Official playlist endpoint, requested once at build time: the prerenderer
- * has network access, so no CORS proxy is needed and visitors get a static
- * payload. Track IDs are stable, which lets the browser build playback URLs
- * itself (see `source`) instead of calling the API at runtime.
- */
-const { data: playlist } = await useAsyncData<PlaylistData | null>(
-  `netease-playlist:${playlistId}`,
-  async () => {
-    try {
-      const res = await $fetch<NeteasePlaylist>(
-        `https://music.163.com/api/playlist/detail?id=${playlistId}`,
-        {
-          headers: { 'user-agent': 'Mozilla/5.0', 'referer': 'https://music.163.com/' },
-          timeout: 10_000,
-        },
-      )
-      const result = res.result
-
-      if (!result?.tracks?.length) {
-        return null
-      }
-
-      return {
-        name: result.name ?? '歌单',
-        cover: toHttps(result.coverImgUrl),
-        tracks: result.tracks.map(track => ({
-          id: track.id,
-          name: track.name,
-          artists: (track.artists ?? []).map(artist => artist.name).join(' / '),
-          cover: toHttps(track.album?.picUrl),
-          duration: track.duration,
-        })),
-      }
-    }
-    catch {
-      return null
-    }
-  },
-  {
-    default: () => null,
-  },
-)
-
-const tracks = computed(() => playlist.value?.tracks ?? [])
-
-const audio = ref<HTMLAudioElement | null>(null)
 const bar = ref<HTMLElement | null>(null)
-const currentIndex = ref(0)
-const playing = ref(false)
-const currentTime = ref(0)
-const duration = ref(0)
-const mode = ref<PlayMode>('list')
-const listOpen = ref(false)
 const dragging = ref(false)
 const dragRatio = ref(0)
-const notice = ref('')
+const listOpen = ref(false)
 
-const currentTrack = computed<Track | undefined>(() => tracks.value[currentIndex.value])
-
-/** Legacy official redirect endpoint: `<audio>` follows it, no fetch needed. */
-const source = computed(() => currentTrack.value
-  ? `https://music.163.com/song/media/outer/url?id=${currentTrack.value.id}.mp3`
-  : '')
+const modeIcon = computed(() => MODE_ICON[mode.value] ?? 'repeat')
 
 const ratio = computed(() => {
   if (dragging.value) {
@@ -121,11 +53,13 @@ const ratio = computed(() => {
   }
 
   return duration.value > 0
-    ? Math.min(1, currentTime.value / duration.value)
+    ? Math.min(1, time.value / duration.value)
     : 0
 })
 
-const modeIcon = computed(() => MODE_ICON[mode.value])
+const elapsed = computed(() => (dragging.value
+  ? dragRatio.value * duration.value
+  : time.value))
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds <= 0) {
@@ -136,128 +70,6 @@ function formatTime(seconds: number): string {
   const rest = Math.floor(seconds % 60)
 
   return `${minutes}:${String(rest).padStart(2, '0')}`
-}
-
-async function startPlayback(): Promise<void> {
-  const el = audio.value
-
-  if (!el) {
-    return
-  }
-
-  try {
-    await el.play()
-  }
-  catch {
-    // Autoplay policies or an unavailable source; the error handler covers it.
-  }
-}
-
-function togglePlay(): void {
-  if (playing.value) {
-    audio.value?.pause()
-    return
-  }
-
-  void startPlayback()
-}
-
-async function selectTrack(index: number): Promise<void> {
-  currentIndex.value = index
-  currentTime.value = 0
-  duration.value = (tracks.value[index]?.duration ?? 0) / 1000
-  playing.value = true
-  await nextTick()
-  void startPlayback()
-}
-
-function next(): void {
-  const total = tracks.value.length
-
-  if (total === 0) {
-    return
-  }
-
-  if (mode.value === 'shuffle' && total > 1) {
-    let pick = currentIndex.value
-
-    while (pick === currentIndex.value) {
-      pick = Math.floor(Math.random() * total)
-    }
-
-    void selectTrack(pick)
-    return
-  }
-
-  void selectTrack((currentIndex.value + 1) % total)
-}
-
-function previous(): void {
-  const el = audio.value
-
-  // Matches every other player: a tap after a few seconds restarts the track.
-  if (el && el.currentTime > 3) {
-    el.currentTime = 0
-    return
-  }
-
-  const total = tracks.value.length
-
-  if (total === 0) {
-    return
-  }
-
-  void selectTrack((currentIndex.value - 1 + total) % total)
-}
-
-function cycleMode(): void {
-  mode.value = mode.value === 'list'
-    ? 'one'
-    : mode.value === 'one'
-      ? 'shuffle'
-      : 'list'
-}
-
-function onTimeUpdate(event: Event): void {
-  if (!dragging.value) {
-    currentTime.value = (event.target as HTMLAudioElement).currentTime
-  }
-}
-
-function onLoadedMetadata(event: Event): void {
-  const el = event.target as HTMLAudioElement
-
-  if (Number.isFinite(el.duration) && el.duration > 0) {
-    duration.value = el.duration
-  }
-}
-
-function onEnded(): void {
-  if (mode.value === 'one') {
-    const el = audio.value
-
-    if (el) {
-      el.currentTime = 0
-      void startPlayback()
-    }
-
-    return
-  }
-
-  next()
-}
-
-/** Skips a broken source instead of retrying the same ID forever. */
-function onError(): void {
-  notice.value = '有曲目取不到，已自动跳过'
-  const total = tracks.value.length
-
-  if (total <= 1) {
-    playing.value = false
-    return
-  }
-
-  void selectTrack((currentIndex.value + 1) % total)
 }
 
 function ratioFromEvent(event: PointerEvent): number {
@@ -295,38 +107,31 @@ function onSeekEnd(): void {
     return
   }
 
-  const el = audio.value
   dragging.value = false
-
-  if (!el || !Number.isFinite(el.duration)) {
-    return
-  }
-
-  el.currentTime = dragRatio.value * el.duration
-  currentTime.value = el.currentTime
+  seek(dragRatio.value)
 }
 
 function onSeekKey(event: KeyboardEvent): void {
-  const el = audio.value
-
-  if (!el) {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
     return
   }
 
-  if (event.key === 'ArrowLeft') {
-    el.currentTime = Math.max(0, el.currentTime - 5)
-    event.preventDefault()
-  }
-  else if (event.key === 'ArrowRight') {
-    el.currentTime = Math.min(el.duration || 0, el.currentTime + 5)
-    event.preventDefault()
-  }
+  event.preventDefault()
+  const step = event.key === 'ArrowLeft'
+    ? -5
+    : 5
+  seek(duration.value > 0
+    ? (elapsed.value + step) / duration.value
+    : 0)
 }
 </script>
 
 <template>
-  <MiuixCard v-if="appConfig.music.enabled">
-    <div class="p-4">
+  <component
+    :is="props.variant === 'sidebar' ? MiuixCard : 'div'"
+    :class="props.variant === 'panel' ? 'w-full' : ''"
+  >
+    <div :class="props.variant === 'sidebar' ? 'p-4' : 'p-3'">
       <div class="flex items-center justify-between">
         <h2 class="widget-title flex items-center gap-2 text-sm font-bold text-app-text">
           <Icon name="miuix:Music" class="text-app-primary-text" :size="16" />
@@ -382,7 +187,7 @@ function onSeekKey(event: KeyboardEvent): void {
         </div>
 
         <div class="mt-1 flex items-center justify-between text-[10px] tabular-nums text-app-text-faint">
-          <span>{{ formatTime(dragging ? dragRatio * duration : currentTime) }}</span>
+          <span>{{ formatTime(elapsed) }}</span>
           <span>{{ formatTime(duration) }}</span>
         </div>
 
@@ -391,7 +196,8 @@ function onSeekKey(event: KeyboardEvent): void {
             type="button"
             class="rounded-full p-1.5 transition-colors"
             :class="mode === 'list' ? 'text-app-text-faint hover:text-app-text' : 'text-app-text'"
-            :aria-label="mode === 'list' ? '列表循环' : mode === 'one' ? '单曲循环' : '随机播放'"
+            :aria-label="MODE_LABEL[mode]"
+            :title="MODE_LABEL[mode]"
             @click="cycleMode"
           >
             <Icon :name="modeIcon" :size="16" />
@@ -410,7 +216,7 @@ function onSeekKey(event: KeyboardEvent): void {
             type="button"
             class="rounded-full p-1 text-app-text transition-opacity hover:opacity-60"
             :aria-label="playing ? '暂停' : '播放'"
-            @click="togglePlay"
+            @click="toggle"
           >
             <Icon :name="playing ? 'player-pause' : 'player-play'" :size="22" />
           </button>
@@ -436,22 +242,18 @@ function onSeekKey(event: KeyboardEvent): void {
           </button>
         </div>
 
-        <p v-if="notice" class="mt-1 text-[10px] leading-4 text-app-text-faint">
-          {{ notice }}
-        </p>
-
         <div
           class="grid transition-[grid-template-rows] duration-300 ease-out"
           :class="listOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
         >
           <div class="overflow-hidden">
             <ul class="mt-2.5 max-h-56 space-y-0.5 overflow-y-auto pr-1">
-              <li v-for="(track, index) in tracks" :key="track.id">
+              <li v-for="(track, i) in tracks" :key="track.id">
                 <button
                   type="button"
                   class="flex w-full items-center gap-2.5 rounded-xl p-1.5 text-left transition-colors hover:bg-app-bg-soft"
-                  :class="index === currentIndex && 'bg-app-bg-soft'"
-                  @click="selectTrack(index)"
+                  :class="i === index && 'bg-app-bg-soft'"
+                  @click="select(i)"
                 >
                   <img
                     v-if="track.cover"
@@ -465,7 +267,7 @@ function onSeekKey(event: KeyboardEvent): void {
                   <span class="min-w-0 flex-1">
                     <span
                       class="block truncate text-[11px] font-medium"
-                      :class="index === currentIndex ? 'text-app-primary-text' : 'text-app-text'"
+                      :class="i === index ? 'text-app-primary-text' : 'text-app-text'"
                     >{{ track.name }}</span>
                     <span class="block truncate text-[10px] text-app-text-faint">{{ track.artists }}</span>
                   </span>
@@ -474,23 +276,15 @@ function onSeekKey(event: KeyboardEvent): void {
             </ul>
           </div>
         </div>
-
-        <audio
-          ref="audio"
-          :src="source"
-          preload="none"
-          @play="playing = true"
-          @pause="playing = false"
-          @timeupdate="onTimeUpdate"
-          @loadedmetadata="onLoadedMetadata"
-          @ended="onEnded"
-          @error="onError"
-        />
       </template>
 
-      <p v-else class="mt-3 text-[11px] leading-5 text-app-text-faint">
+      <p v-else-if="pending" class="mt-3 text-[11px] leading-5 text-app-text-faint">
+        歌单加载中…
+      </p>
+
+      <p v-else-if="unavailable" class="mt-3 text-[11px] leading-5 text-app-text-faint">
         歌单暂时取不到，稍后再刷新看看。
       </p>
     </div>
-  </MiuixCard>
+  </component>
 </template>

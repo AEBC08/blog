@@ -97,6 +97,7 @@ onBeforeUnmount(() => {
         </nav>
 
         <div class="flex items-center gap-0.5">
+          <MusicMenu />
           <a
             v-for="item in appConfig.header.socialLinks"
             :key="item.href"
