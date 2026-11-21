@@ -51,18 +51,42 @@ export function useMusicPlayer() {
     ? `https://music.163.com/song/media/outer/url?id=${currentTrack.value.id}.mp3`
     : '')
 
-  async function load(): Promise<void> {
-    if (playlist.value || pending.value) {
+  /**
+   * GitHub's CDN caches the snapshot for five minutes and will happily serve a
+   * cached 404 as well, which is why a plain reload used to keep showing the
+   * error long after the data existed. A bucketed query plus `no-store` makes
+   * every load a real request; the payload is 2 KB, so this is cheap.
+   */
+  function snapshotUrl(base: string): string {
+    const bucket = Math.floor(Date.now() / 60_000)
+
+    return `${base}${base.includes('?')
+      ? '&'
+      : '?'}v=${bucket}`
+  }
+
+  async function load(force = false): Promise<void> {
+    if (pending.value || (playlist.value && !force)) {
       return
     }
 
     pending.value = true
+    unavailable.value = false
 
     try {
-      const data = await $fetch<MusicPlaylist>(appConfig.music.dataUrl, { timeout: 15_000 })
+      const data = await $fetch<MusicPlaylist>(snapshotUrl(appConfig.music.dataUrl), {
+        timeout: 15_000,
+        cache: 'no-store',
+      })
 
       if (data?.tracks?.length) {
         playlist.value = data
+
+        if (index.value >= data.tracks.length) {
+          index.value = 0
+        }
+
+        time.value = 0
         duration.value = (data.tracks[index.value]?.duration ?? 0) / 1000
       }
       else {

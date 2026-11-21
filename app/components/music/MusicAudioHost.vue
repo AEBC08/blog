@@ -3,13 +3,20 @@ const { source, setAudio, load, onTimeUpdate, onLoadedMetadata, onPlay, onPause,
 
 const el = ref<HTMLAudioElement | null>(null)
 
+/** Coming back from offline is the most common reason the first load failed. */
+function onOnline(): void {
+  void load()
+}
+
 onMounted(() => {
   setAudio(el.value)
   void load()
+  window.addEventListener('online', onOnline)
 })
 
 onBeforeUnmount(() => {
   setAudio(null)
+  window.removeEventListener('online', onOnline)
 })
 </script>
 

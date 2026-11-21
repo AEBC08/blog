@@ -35,3 +35,14 @@
 - 静态 HTML 里不再包含曲目，对 SEO 无影响（音乐本来也不需要被索引）。
 - 302 目标仍是 `http://m*.music.126.net`，Chrome/Firefox 自动升级 HTTPS；Safari 若拒绝，表现为点播放无反应，`@error` 会跳到下一首。
 - 旧文件 `app/components/sidebar/MusicWidget.vue` 已删除，职责拆成 composable（状态）+ host（音频）+ card（界面）+ menu（入口）。
+
+## 缓存与重试修正（2026-11-21）
+
+线上出现过「首次取数失败后，无论怎么刷新都只看到失败提示」：浏览器把 `raw.githubusercontent.com` 的失败响应按 5 分钟缓存了，`$fetch` 命中本地缓存，根本没有发出新请求。现在：
+
+- 请求 URL 带按分钟分桶的 `?v=<bucket>`，并显式 `cache: 'no-store'`，每次 `load()` 都真的走网络；快照只有 2 KB，代价可以忽略。
+- `load(force)` 增加强制重取；只有 `pending` 为真时才会短路，失败后不会锁死。
+- 失败态在卡片里给了「重试」按钮；`window` 的 `online` 事件也会自动重取一次（离线恢复是最常见的首次失败原因）。
+- 刷新时如果 `index` 越界（歌单变短）会回到第 0 首，并重置进度。
+
+结论：这里的「本地缓存」是 HTTP 缓存，不是我们自己的 localStorage；播放器从前到后没有写任何浏览器存储。
