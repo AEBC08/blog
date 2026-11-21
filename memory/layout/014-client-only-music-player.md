@@ -76,3 +76,13 @@
 - `scripts/sync-playlist.mjs` 现在把 `id` 写进快照；变化判定也看 `id / name / cover / tracks`，所以歌单改名、换封面都会触发重写（之前只比 tracks，改名会被跳过）。名字本身一直取自官方接口的 `playlist.name`。
 - `useMusicPlayer()` 暴露 `playlistUrl`：优先用快照里的 `id`，缺失时退回 `site.config.ts` 的 `music.playlistId`，指向 `https://music.163.com/m/playlist?id=<id>`。
 - `MusicCard` 头部「N 首」右边加了 `arrow-up-right` 图标链接，`target="_blank"` + `rel="noopener noreferrer"`，侧边栏与顶栏弹层共用。
+
+## 浏览器媒体控制中心（2026-11-22）
+
+`MusicAudioHost` 里接了 Media Session API，Windows 的媒体浮层、Chrome 的媒体中心、锁屏和耳机按键都能控制这一份 audio：
+
+- `metadata`：歌名 / 歌手 / 歌单名 / 封面（`?param=96y96`、`192`、`384` 三档），曲目或歌单名变化时刷新。
+- `setActionHandler`：`play / pause / stop / previoustrack / nexttrack / seekbackward / seekforward / seekto`。前一首还是沿用 3 秒规则；`stop` 是暂停并回到 0。
+- `playbackState` 跟 `playing` 同步；`setPositionState` 跟 `time` / `duration` 同步（拖动进度条也会更新）。
+- 为了不让播放器只有「按比例跳」的能力，composable 新增 `seekTo(seconds)` 与 `seekBy(delta)`。
+- 全部调用都做了特性检测和 try/catch：不支持的浏览器按原样跑，不报错。

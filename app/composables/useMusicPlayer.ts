@@ -214,6 +214,24 @@ export function useMusicPlayer() {
     time.value = audioEl.currentTime
   }
 
+  /** Absolute seek in seconds, used by the OS media controls. */
+  function seekTo(seconds: number): void {
+    if (!audioEl || !Number.isFinite(audioEl.duration) || audioEl.duration <= 0) {
+      return
+    }
+
+    audioEl.currentTime = Math.min(audioEl.duration, Math.max(0, seconds))
+    time.value = audioEl.currentTime
+  }
+
+  function seekBy(seconds: number): void {
+    if (!audioEl) {
+      return
+    }
+
+    seekTo(audioEl.currentTime + seconds)
+  }
+
   function onTimeUpdate(event: Event): void {
     time.value = (event.target as HTMLAudioElement).currentTime
   }
@@ -269,6 +287,8 @@ export function useMusicPlayer() {
     select,
     cycleMode,
     seek,
+    seekTo,
+    seekBy,
     setAudio,
     onTimeUpdate,
     onLoadedMetadata,
