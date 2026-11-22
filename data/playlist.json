@@ -1,13 +1,13 @@
 {
   "id": 18597875286,
   "name": "MyBlogMusic",
-  "cover": "https://p1.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
+  "cover": "https://p2.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
   "tracks": [
     {
       "id": 2729835929,
       "name": "Resonance",
       "artists": "Quiet Comet / Singto Conley / Moon Jelly",
-      "cover": "https://p1.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
+      "cover": "https://p2.music.126.net/ykuJm5ZvVvPMGKwbdV7gnQ==/109951171519692664.jpg",
       "duration": 222000
     },
     {
@@ -67,5 +67,5 @@
       "duration": 233218
     }
   ],
-  "updatedAt": "2026-11-21T20:58:16.233Z"
+  "updatedAt": "2026-11-22T01:08:03.787Z"
 }
